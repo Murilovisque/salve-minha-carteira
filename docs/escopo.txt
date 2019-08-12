@@ -1,22 +1,26 @@
 Versão 1:
-    Armazenar registros de compra e venda de ações
-        Tela
-            Deve auto completar quando o código da ação for conhecida
-        Regras
-            Informar os dados da boleta
-    Tela de visualização da quantidade das ações
-        Lista das ação, com a quantidade total, menor/maior e valor médio
-    Tela de detalhes da ação específica
-        Lista de todas as compras das ações 
+    Tela para armazenar registros de compra e venda de ações
+        Deve auto completar quando o código da ação for conhecida
+    Regras
+        Informar os dados da boleta
+    Tela de visualização da quantidade das ações agrupadas pelo código (home)
+        Quantidade total de ações, compra mais baixa, mais alta e valor médio
+    Tela de detalhes da ação de código selecionado pelo cliente
+        Listagem de todas as compras de ações 
+        Opção de edição da compra da ação
+        Opção de remoção de ação
     Tela de planejamento
-        Exibir dados de planejamento de compra de ações
-            É uma compra de ações já comprada anteriormente?
-                Sim. Deve exibir o menor valor, o maior e a média pagos por aquele daquela ação
-            É uma venda de ações
-                Deve indicar o valor que a ação deve estar para ser vendida com o percentual de lucro que o cliente deseja ter, dada a quantidade que irá vender                    
-                    Venderá todas as ações daquele código?
-                        Sim, então é só somar todas e acrescentar os 10%, depois dividir esse resultado com a quantidade de ações
-                        Não, somar os valores das ações de menor para o maior valor e do maior para o menor valor, depois dividir cada resultado com a quantidade de ações. Afim de indicar as duas situações para venda das ações. Por enquanto não irá considerar vendas anteriores nesse calculo
+        É uma compra de ações de código que já foram compradas anteriormente?
+            Sim. Deve exibir o menor valor, o maior e a média pagos por daquela ação
+        É uma venda de ações
+            Campo com o percentual que desejará ter de lucro/
+            Venderá todas as ações daquele código?
+                Sim, somar todas e acrescentar o percentual, depois dividir esse resultado com a quantidade total de ações daquele código
+                Não, somar todas e acrescentar o percentual, depois dividir esse resultado com a quantidade de ações informadas pelo usuário 
+                Regras
+                    valores positivos, aplicar as regras padrões
+                    Valor zero, não acrescentar o percentual
+                    valor negativos, subtrair o percentual (cálculo do prejuízo)
     Entidades
         Acao
             Nome, Código
