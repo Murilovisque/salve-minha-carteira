@@ -1,12 +1,17 @@
 Versão 1:
+    Cadastro de usuário
+        Nome completo, email e senha
+    Regras
+        Boleta
+            As boletas são associadas aos usuários, pois este que efetua a compra e venda de ações
     Tela para armazenar registros de compra e venda de ações
         Deve auto completar quando o código da ação for conhecida
     Regras
         Informar os dados da boleta
-    Tela de visualização da quantidade das ações agrupadas pelo código (home)
+    Tela de visualização da quantidade das ações agrupadas por código (home)
         Quantidade total de ações, compra mais baixa, mais alta e valor médio
     Tela de detalhes da ação de código selecionado pelo cliente
-        Listagem de todas as compras de ações 
+        Listagem de todas as compras de ações
         Opção de edição da compra da ação
         Opção de remoção de ação
     Tela de planejamento
@@ -16,7 +21,7 @@ Versão 1:
             Campo com o percentual que desejará ter de lucro/
             Venderá todas as ações daquele código?
                 Sim, somar todas e acrescentar o percentual, depois dividir esse resultado com a quantidade total de ações daquele código
-                Não, somar todas e acrescentar o percentual, depois dividir esse resultado com a quantidade de ações informadas pelo usuário 
+                Não, somar todas e acrescentar o percentual, depois dividir esse resultado com a quantidade de ações informadas pelo usuário
                 Regras
                     valores positivos, aplicar as regras padrões
                     Valor zero, não acrescentar o percentual
@@ -26,4 +31,3 @@ Versão 1:
             Nome, Código
         Boleta
             Tipo (Compra/venda), Data, Valor, Quantidade, Ação
-    
