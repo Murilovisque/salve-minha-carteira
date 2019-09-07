@@ -1,4 +1,4 @@
-package com.salveminhacarteira.boletas;
+package com.salveminhacarteira.boleta;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class BoletaManager {
 
-    @Autowired
-    private BoletaRepository boletaRepository;
+    // @Autowired
+    // private BoletaRepository boletaRepository;
 
     public List<BoletasAgrupadasPelaDaAcao> getBoletasAgrupadasPorAcao() {
         return null;

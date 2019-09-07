@@ -1,4 +1,4 @@
-package com.salveminhacarteira.boletas;
+package com.salveminhacarteira.boleta;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -8,9 +8,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import com.salveminhacarteira.acoes.Acao;
+import com.salveminhacarteira.acao.Acao;
 
 import lombok.Getter;
 
@@ -30,7 +31,7 @@ public class Boleta {
 
     private Integer quantidade;
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = Boleta.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Boleta.class)
     private Acao acao;
 
     public static enum Tipo {

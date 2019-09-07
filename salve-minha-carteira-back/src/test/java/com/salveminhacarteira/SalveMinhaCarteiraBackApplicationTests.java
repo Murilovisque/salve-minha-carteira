@@ -1,4 +1,4 @@
-package com.salveminhacarteira.main;
+package com.salveminhacarteira;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

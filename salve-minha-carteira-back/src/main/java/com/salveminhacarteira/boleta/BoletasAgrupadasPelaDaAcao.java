@@ -1,8 +1,8 @@
-package com.salveminhacarteira.boletas;
+package com.salveminhacarteira.boleta;
 
 import java.math.BigDecimal;
 
-import com.salveminhacarteira.acoes.Acao;
+import com.salveminhacarteira.acao.Acao;
 
 import lombok.Getter;
 

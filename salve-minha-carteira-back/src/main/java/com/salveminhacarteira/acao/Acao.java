@@ -1,4 +1,4 @@
-package com.salveminhacarteira.acoes;
+package com.salveminhacarteira.acao;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
