@@ -4,6 +4,7 @@ import static com.salveminhacarteira.usuario.DadosUsuariosTests.usuarioOK;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -15,6 +16,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
+import com.salveminhacarteira.seguranca.TokenManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -37,6 +40,12 @@ public class UsuarioManagerTests {
 
     @MockBean
     private BCryptPasswordEncoder encriptadorDeSenha;
+
+    @MockBean
+    private AuthenticationManager authenticationManager;
+
+    @MockBean
+    private TokenManager tokenManager;
 
     @Before
     public void setup() {
@@ -83,6 +92,16 @@ public class UsuarioManagerTests {
         @Bean
         public Validator validator() {
             return Validation.buildDefaultValidatorFactory().getValidator();
+        }
+
+        @Bean
+        public AuthenticationManager authenticationManager() {
+            return mock(AuthenticationManager.class);
+        }
+
+        @Bean
+        public TokenManager tokenManager() {
+            return mock(TokenManager.class);
         }
     }
 }

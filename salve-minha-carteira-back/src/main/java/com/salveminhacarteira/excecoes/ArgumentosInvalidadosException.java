@@ -16,4 +16,13 @@ public class ArgumentosInvalidadosException extends SalveMinhaCarteiraException 
     public <T> ArgumentosInvalidadosException(Set<ConstraintViolation<T>> erros) {
         super(erros.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(",")));
     }
+
+    public ArgumentosInvalidadosException(String msg) {
+        super(msg);
+    }
+
+    @Override
+    public int httpStatus() {
+        return HttpStatus.BAD_REQUEST.value();
+    }
 }

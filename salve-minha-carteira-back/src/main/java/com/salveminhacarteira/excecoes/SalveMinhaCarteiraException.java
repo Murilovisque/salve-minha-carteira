@@ -15,4 +15,8 @@ public class SalveMinhaCarteiraException extends Exception {
     public SalveMinhaCarteiraException(String msg) {
         super(msg);
     }
+
+    public int httpStatus() {
+        return HttpStatus.INTERNAL_SERVER_ERROR.value();
+    }
 }

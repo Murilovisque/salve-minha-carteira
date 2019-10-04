@@ -13,4 +13,9 @@ public class UsuarioJaCadastradoException extends SalveMinhaCarteiraException {
     public UsuarioJaCadastradoException() {
         super("Usuario já cadastrado");
     }
+
+    @Override
+    public int httpStatus() {
+        return HttpStatus.CONFLICT.value();
+    }
 }

@@ -34,7 +34,9 @@ public class Usuario {
         this.senha = senha;
     }
 
-    void encryptPassword(PasswordEncoder encriptadorDeSenha) {
+    Usuario() {}
+
+    void encriptarSenha(PasswordEncoder encriptadorDeSenha) {
         this.senha = encriptadorDeSenha.encode(senha);
     }
 }
