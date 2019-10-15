@@ -1,0 +1,23 @@
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	root /opt/ltt/salve-minha-carteira-front;
+	index index.html index.htm;
+	server_name localhost;
+
+	location /api {
+		proxy_set_header Host $host;
+		proxy_set_header Upgrade    $http_upgrade;
+        proxy_set_header Connection $http_connection;
+		proxy_pass http://localhost:8080/api;
+	}
+
+	location / {
+		proxy_set_header Host $host;
+		proxy_set_header Upgrade    $http_upgrade;
+        proxy_set_header Connection $http_connection;
+		proxy_pass http://localhost:4200;
+		
+	}
+}

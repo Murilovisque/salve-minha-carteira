@@ -1,0 +1,20 @@
+<form class="container" [formGroup]="usuarioForm" (ngSubmit)="cadastrar()" *ngIf="!cadastroRealizado">
+    <label>Nome:
+        <input type="text" class="form-control" placeholder="Fulano..." formControlName="nome" />
+    </label>
+    <label>
+        Email:
+        <input type="email" class="form-control" placeholder="mail@domain.com" formControlName="email" />
+    </label>
+    <label>
+        Senha
+        <input type="password" class="form-control" placeholder="Senha de 4 a 30 digitos" formControlName="senha" />
+    </label>
+    <label>
+        Confirme a senha
+        <input type="password" class="form-control" placeholder="Mesma que a anterior" formControlName="confirmaSenha" />
+    </label>
+    <button type="submit" class="btn" [disabled]="!usuarioForm.valid"
+        [ngClass]="{'btn-success': usuarioForm.valid, 'btn-outline-success': !usuarioForm.valid}">Cadastrar</button> 
+</form>
+<a *ngIf="cadastroRealizado" [routerLink]="['/login']" routerLinkActive="router-link-active">Acesse o sistema</a>
