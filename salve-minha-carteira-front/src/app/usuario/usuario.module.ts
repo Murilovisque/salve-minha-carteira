@@ -6,8 +6,6 @@ import { CadastroUsuarioComponent } from './cadastro-usuario/cadastro-usuario.co
 import { ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 
-
-
 @NgModule({
   declarations: [
     LoginComponent,

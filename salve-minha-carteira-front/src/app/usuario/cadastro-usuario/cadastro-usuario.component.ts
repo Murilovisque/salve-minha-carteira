@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UsuarioService } from '../usuario.service';
-import { NotificadorService } from 'src/app/services/notificador.service';
 import { JaExisteError, SalveMinhaCarteiraError } from 'src/app/errors';
+import { NotificadorService } from 'src/app/notificacao/notificador.service';
 
 @Component({
   selector: 'app-cadastro-usuario',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NotificadorService } from '../services/notificador.service';
-import { Notificacao } from '../entidades/notificacao';
+import { Notificacao } from 'src/app/entidades/notificacao';
+import { NotificadorService } from '../notificador.service';
 
 @Component({
   selector: 'app-notificacoes-alerta',

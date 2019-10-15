@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, timer } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 export class Errors {
     static mapearErro(err :any) :Observable<never> {
@@ -12,6 +13,13 @@ export class Errors {
             }
         }
         return throwError(new SalveMinhaCarteiraError())
+    }
+    static retentarRequisicaoHTTP(tentativas: Observable<any>, quantidadeRetentativas: number = 2, intervaloEntreRetentativas: number = 500): Observable<any> {
+        return tentativas.pipe(mergeMap((error, i) => {
+            if (error instanceof HttpErrorResponse && error.status >= 500 && i + 1 < quantidadeRetentativas)
+              return timer(intervaloEntreRetentativas);
+            return throwError(error);          
+        }))
     }
 }
 
@@ -46,6 +54,6 @@ export class ArgumentosInvalidosError extends SalveMinhaCarteiraError {
     }
 
     getName() :string {
-        return "BadRequestError";
+        return "ArgumentosInvalidosError";
     }
 }
