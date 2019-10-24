@@ -16,7 +16,7 @@ export class Errors {
     }
     static retentarRequisicaoHTTP(tentativas: Observable<any>, quantidadeRetentativas: number = 2, intervaloEntreRetentativas: number = 500): Observable<any> {
         return tentativas.pipe(mergeMap((error, i) => {
-            if (error instanceof HttpErrorResponse && error.status >= 500 && i + 1 < quantidadeRetentativas)
+            if (error instanceof HttpErrorResponse && (error.status == 0 || error.status >= 500) && i + 1 < quantidadeRetentativas)
               return timer(intervaloEntreRetentativas);
             return throwError(error);          
         }))

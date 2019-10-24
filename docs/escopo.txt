@@ -28,6 +28,8 @@ Versão 1:
                     valor negativos, subtrair o percentual (cálculo do prejuízo)
     Entidades
         Acao
-            Nome, Código
+            Nome, Código, Empresa
         Boleta
             Tipo (Compra/venda), Data, Valor, Quantidade, Ação
+        Empresa
+            Nome
