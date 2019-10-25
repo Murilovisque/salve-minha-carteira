@@ -10,6 +10,8 @@ export class Errors {
                     return throwError(new ArgumentosInvalidosError(err.error.message));
                 case 409:
                     return throwError(new JaExisteError(err.error));
+                case 401: 
+                    return throwError(new UsuarioNaoAutenticadoError());
             }
         }
         return throwError(new SalveMinhaCarteiraError())
@@ -55,5 +57,15 @@ export class ArgumentosInvalidosError extends SalveMinhaCarteiraError {
 
     getName() :string {
         return "ArgumentosInvalidosError";
+    }
+}
+
+export class UsuarioNaoAutenticadoError extends SalveMinhaCarteiraError {
+    constructor() {
+        super("Usuário não autenticado");
+    }
+
+    getName() :string {
+        return "UsuarioNaoAutenticadoError";
     }
 }

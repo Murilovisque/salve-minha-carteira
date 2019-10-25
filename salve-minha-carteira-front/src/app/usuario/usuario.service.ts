@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, retryWhen } from 'rxjs/operators';
+import { catchError, retryWhen, tap } from 'rxjs/operators';
 
 import { Errors } from '../errors';
 
@@ -16,9 +16,9 @@ export class UsuarioService {
   constructor(private http: HttpClient) { }
 
   cadastrar(nome: string, email: string, senha: string): Observable<any> {    
-    let params = new HttpParams().set('nome', nome).append('email', email).append('senha', senha)
+    let params = new HttpParams().set('nome', nome.trim()).append('email', email).append('senha', senha)
     return this.http.post(UsuarioService.URL_USUARIOS, params).
-      pipe(retryWhen(Errors.retentarRequisicaoHTTP), catchError(Errors.mapearErro))
+      pipe(tap(res => console.log(res)), retryWhen(Errors.retentarRequisicaoHTTP), catchError(Errors.mapearErro))
   }
 
   autenticar(email: string, senha: string) {

@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { UsuarioModule } from './usuario/usuario.module';
 import { NotificacaoModule } from './notificacao/notificacao.module';
+import { TokenModule } from './token/token.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { NotificacaoModule } from './notificacao/notificacao.module';
     NgbModule,
     UsuarioModule,
     NotificacaoModule,
-    AppRoutingModule,    
+    AppRoutingModule,
+    TokenModule,    
   ],
   providers: [],
   bootstrap: [AppComponent]

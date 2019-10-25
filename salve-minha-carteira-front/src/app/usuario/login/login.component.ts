@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UsuarioService } from '../usuario.service';
+import { UsuarioNaoAutenticadoError, SalveMinhaCarteiraError } from 'src/app/errors';
 
 @Component({
   selector: 'app-login',
@@ -13,12 +15,24 @@ export class LoginComponent implements OnInit {
     senha: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(30)])
   }) 
 
-  constructor() { }
+  constructor(private usuarioService: UsuarioService, private notificadorService: NotificadorService) { }
 
   ngOnInit() {
   }
 
   autenticar() {
-    console.log(this.loginForm.value)
+    this.usuarioService.autenticar(this.obterValorForm('email'), this.obterValorForm('senha')).subscribe(
+      (res) => {
+        console.log(console.log(res.body))
+      },
+      (err) => {
+        let msg = err instanceof UsuarioNaoAutenticadoError ? "Email ou senha inválidos" : (err as SalveMinhaCarteiraError).message;
+        this.notificadorService.adicionarAlertaErro(msg);
+      }
+    );
+  }
+
+  private obterValorForm(campo: string): string {
+    return this.loginForm.get(campo).value as string
   }
 }
