@@ -24,6 +24,7 @@ export class CadastroUsuarioComponent implements OnInit {
   constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private notificadorService: NotificadorService) { }
 
   ngOnInit() {
+    this.notificadorService.removerAlerta();
   }
 
   cadastrar() {
