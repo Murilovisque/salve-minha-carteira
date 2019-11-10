@@ -1,0 +1,24 @@
+version: '3'
+services:
+  salve-minha-carteira-back:
+    build: ./extras/docker
+    depends_on: 
+     - "salve-minha-carteira-back-bd"
+    volumes:
+     - .:/salve-minha-carteira-back
+     - gradle-volume:/root/.gradle
+    network_mode: "host"
+  salve-minha-carteira-back-bd:
+    image: "mysql:8"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+     - "3306:3306"
+    volumes:
+     - ./extras/database/create-tables.sql:/docker-entrypoint-initdb.d/1-create-tables.sql
+    environment:
+     - MYSQL_ROOT_PASSWORD=123
+     - MYSQL_DATABASE=salve-minha-carteira-db
+    network_mode: "host"
+volumes:
+  gradle-volume:

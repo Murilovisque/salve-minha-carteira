@@ -8,20 +8,26 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.salveminhacarteira.utilitarios.Validador;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Entity
 @Getter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario {
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
     @NotBlank(message = MensagensUsuario.NOME_INVALIDO)
     private String nome;
-    @Pattern(regexp = "^[^@.]+@[^@.]+\\.[^@]+$", message = MensagensUsuario.EMAIL_INVALIDO)
+    @Pattern(regexp = Validador.EMAIL_REGEX_PATTERN, message = MensagensUsuario.EMAIL_INVALIDO)
     @Column(unique = true)
     private String email;
     @NotBlank(message = MensagensUsuario.SENHA_INVALIDA)

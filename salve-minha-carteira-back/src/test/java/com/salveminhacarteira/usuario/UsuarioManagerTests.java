@@ -54,7 +54,7 @@ public class UsuarioManagerTests {
 
     @Test
     public void deveCadastrarQuandoUsuarioValido() throws SalveMinhaCarteiraException {
-        usuarioManager.cadastrarUsuario(usuarioOK().getNome(), usuarioOK().getEmail(), usuarioOK().getSenha());
+        usuarioManager.cadastrar(usuarioOK().getNome(), usuarioOK().getEmail(), usuarioOK().getSenha());
         verify(encriptadorDeSenha, times(1)).encode(any());
         verify(usuarioRepository, times(1)).save(any(Usuario.class));
     }
@@ -74,7 +74,7 @@ public class UsuarioManagerTests {
 
     private void verificarSeCadastrarUsuarioFalha(String nome, String email, String senha, String... erros) {
         try {
-            usuarioManager.cadastrarUsuario(nome, email, senha);
+            usuarioManager.cadastrar(nome, email, senha);
             fail("Era esperada uma exceção, mas não foi lançada");
         } catch(SalveMinhaCarteiraException ex) {
             assertTrue(Arrays.stream(erros).allMatch(e -> ex.getMessage().contains(e)));

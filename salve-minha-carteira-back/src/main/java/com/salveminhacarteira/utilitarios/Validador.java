@@ -1,9 +1,10 @@
-package com.salveminhacarteira.validadores;
+package com.salveminhacarteira.utilitarios;
 
 import java.util.regex.Pattern;
 
 public final class Validador {
-    private static final Pattern EMAIL_REGEX = Pattern.compile("^[^@.]+@[^@.]+\\.[^@]+$");
+    public static final String EMAIL_REGEX_PATTERN = "^[^@.]+@[^@.]+\\.[^@]+$";
+    private static final Pattern EMAIL_REGEX = Pattern.compile(EMAIL_REGEX_PATTERN);
 
     public static boolean formatoEmailEhValido(String email) {
         return (email == null || EMAIL_REGEX.matcher(email).matches());            

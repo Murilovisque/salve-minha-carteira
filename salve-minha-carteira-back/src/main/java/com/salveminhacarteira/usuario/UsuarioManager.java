@@ -1,14 +1,18 @@
 package com.salveminhacarteira.usuario;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collections;
 
 import javax.validation.Validator;
 
+import com.salveminhacarteira.SalveMinhaCarteiraBackApplication;
 import com.salveminhacarteira.excecoes.ArgumentosInvalidadosException;
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
+import com.salveminhacarteira.seguranca.Token;
 import com.salveminhacarteira.seguranca.TokenManager;
 import com.salveminhacarteira.usuario.excecoes.UsuarioJaCadastradoException;
-import com.salveminhacarteira.validadores.Validador;
+import com.salveminhacarteira.utilitarios.Erros;
+import com.salveminhacarteira.utilitarios.Validador;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +47,7 @@ public class UsuarioManager implements UserDetailsService {
     @Autowired
     private TokenManager tokenManager;
 
-    public void cadastrarUsuario(String nome, String email, String senha) throws SalveMinhaCarteiraException {
+    public void cadastrar(String nome, String email, String senha) throws SalveMinhaCarteiraException {
         var u = new Usuario(nome, email, senha);
         var erros = validator.validate(u);
         if (!erros.isEmpty())
@@ -52,17 +56,21 @@ public class UsuarioManager implements UserDetailsService {
         try {
             usuarioRepository.save(u);
         } catch (DataIntegrityViolationException ex) {
-            logger.info("Usuário {} tentou se cadastrar com o email {}, porém já existe", nome, email);
-            throw new UsuarioJaCadastradoException();
+            if (Erros.ehRegistroDuplicado(ex)) {
+                logger.info("Usuário {} tentou se cadastrar com o email {}, porém já existe", nome, email);
+                throw new UsuarioJaCadastradoException();
+            }            
+            logger.error(ex.toString());
+            throw new SalveMinhaCarteiraException();
         }
         logger.info("Usuário {} cadastrado com email {}", nome, email);
     }
 
-    public String autenticarEhObterToken(String email, String senha) throws SalveMinhaCarteiraException {
+    public Token autenticarEhObterToken(String email, String senha) throws SalveMinhaCarteiraException {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, senha));
         logger.info("Usuário {} autenticado", email);
         var u = usuarioRepository.obterUsuarioPeloEmail(email);
-        return tokenManager.gerarToken(u.get()).getHash();
+        return tokenManager.gerarToken(u.get());
     }
 
     @Override

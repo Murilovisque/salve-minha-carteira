@@ -1,6 +1,8 @@
 #!/bin/bash
 
-docker stop --time=1 salve-minha-carteira-back
-docker build -t salve-minha-carteira-back extras/docker/
-docker run -d -v $(pwd):/salve-minha-carteira-back -e us_id=`id -u` -e gr_id=`id -g` --rm --net=host -v gradle-volume:/root/.gradle --name salve-minha-carteira-back salve-minha-carteira-back
-docker exec -it salve-minha-carteira-back bash
+export us_id=`id -u`
+export gr_id=`id -g`
+
+docker-compose rm -s -f
+docker-compose up -d --build
+docker-compose exec -e us_id=`id -u` -e gr_id=`id -g` salve-minha-carteira-back bash

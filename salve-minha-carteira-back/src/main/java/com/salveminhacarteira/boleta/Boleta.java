@@ -2,6 +2,7 @@ package com.salveminhacarteira.boleta;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,18 +10,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 import com.salveminhacarteira.acao.Acao;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-@Entity
+//@Entity
 @Getter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Boleta {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     private Tipo tipo;
@@ -37,6 +40,8 @@ public class Boleta {
     public static enum Tipo {
         VENDA, COMPRA
     }
+
+    
 }
 
 
