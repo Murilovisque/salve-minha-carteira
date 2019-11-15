@@ -16,6 +16,8 @@ services:
      - "3306:3306"
     volumes:
      - ./extras/database/create-tables.sql:/docker-entrypoint-initdb.d/1-create-tables.sql
+     - ./extras/database/populate-empresa.sql:/docker-entrypoint-initdb.d/2-populate-empresa.sql
+     - ./extras/database/populate-acoes.sql:/docker-entrypoint-initdb.d/3-populate-acoes.sql
     environment:
      - MYSQL_ROOT_PASSWORD=123
      - MYSQL_DATABASE=salve-minha-carteira-db

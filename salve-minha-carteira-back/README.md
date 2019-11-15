@@ -17,10 +17,26 @@ Executar os comandos abaixo para iniciar o container em background e acessá-lo
     - http://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/equities/historical-quotes/
 - Executar os comandos abaixo
 ```
-cat COTAHIST_A2019.TXT | sed '1d;$d' > COTAHIST_A2019-limpo.TXT
-while read line; do COD_NEG_PAPEL="${line:13:9}"; NOM_EMPRE_RES="${line:28:9}"; echo "${COD_NEG_PAPEL} - ${NOM_EMPRE_RES}"; done < COTAHIST_A2019-limpo.TXT
+ARQUIVOACOES="COTAHIST_A2019.TXT" #colocar o nome do arquivo baixado
+sed '1d;$d' ${ARQUIVOACOES} -i ${ARQUIVOACOES}
+echo "use salve-minha-carteira-db;" > populate-empresa.sql
+awk '{ nomeempr=substr($0, 28, 12); codbgi=substr($0, 11, 2); gsub(/[ \t]+$/, "", nomeempr); queryins="INSERT INTO empresa (nome) VALUES (\x27"nomeempr"\x27);"; if (codbgi == "96" || codbgi == "02") print queryins }' ${ARQUIVOACOES} | sort -u >> populate-empresa.sql
+rm ${ARQUIVOACOES}
 ```
+Atualizar o arquivo gerado substituindo o que está localizado na pasta extras/database/
 
+## Criando/atualizando script para popular a tabela de acoes na bolsa
+- Acessar o site da b3 e baixar o arquivo com o histórico anual:
+    - http://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/equities/historical-quotes/
+- Executar os comandos abaixo
+```
+ARQUIVOACOES="COTAHIST_A2019.TXT" #colocar o nome do arquivo baixado
+sed '1d;$d' ${ARQUIVOACOES} -i ${ARQUIVOACOES}
+echo "use salve-minha-carteira-db;" > populate-acoes.sql
+awk '{ nomeempr=substr($0, 28, 12); codbdi=substr($0, 11, 2); codneg=substr($0, 13, 12); gsub(/[ \t]+$/, "", nomeempr); gsub(/[ \t]+$/, "", codneg); queryins="insert into acao (cod_negociacao, id_empresa) VALUES (\x27"codneg"\x27, (select id from empresa where nome = \x27"nomeempr"\x27));"; if (codbdi == "96" || codbdi == "02") print queryins }' ${ARQUIVOACOES} | sort -u > populate-acoes.sql
+rm ${ARQUIVOACOES}
+```
+Atualizar o arquivo gerado substituindo o que está localizado na pasta extras/database/
 
 ## Banco de dados
 Abaixo comandos para acessar o container que está executando o banco de dados
@@ -29,6 +45,6 @@ docker-compose exec salve-minha-carteira-back-bd bash
 ```
 Executando queries
 ```
-mysql -u salve-minha-carteira-app -p123 -D salve-minha-carteira-db
-mysql -u salve-minha-carteira-app -p123 -D salve-minha-carteira-db < create-tables.sql # informando a ser executado
+mysql -u root -p123 -D salve-minha-carteira-db
+mysql -u root -p123 -D salve-minha-carteira-db < create-tables.sql # informando a ser executado
 ```

@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.salveminhacarteira.acao.Acao;
@@ -16,13 +17,13 @@ import com.salveminhacarteira.acao.Acao;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-//@Entity
+@Entity
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Boleta {
 
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
@@ -34,7 +35,8 @@ public class Boleta {
 
     private Integer quantidade;
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Boleta.class)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_acao")
     private Acao acao;
 
     public static enum Tipo {
