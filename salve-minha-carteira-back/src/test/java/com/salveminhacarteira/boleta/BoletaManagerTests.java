@@ -1,10 +1,7 @@
 package com.salveminhacarteira.boleta;
 
 import static com.salveminhacarteira.boleta.DadosBoletaTests.boletaOK;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static com.salveminhacarteira.seguranca.DadosTokensTests.tokenOK;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -12,18 +9,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.time.LocalDate;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import com.salveminhacarteira.acao.excecoes.AcaoNaoEncontradaException;
 import com.salveminhacarteira.boleta.Boleta.Tipo;
+import com.salveminhacarteira.excecoes.ArgumentosInvalidadosException;
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
-import static com.salveminhacarteira.seguranca.DadosTokensTests.*;
-import com.salveminhacarteira.seguranca.Token;
 import com.salveminhacarteira.seguranca.TokenManager;
 import com.salveminhacarteira.utilitarios.Erros;
 
@@ -64,7 +57,7 @@ public class BoletaManagerTests {
             eq(boletaok.getQuantidade()), eq(boletaok.getAcao().getId()), eq(tokenOK().getIdUsuario()));
     }
 
-    @Test(expected = AcaoNaoEncontradaException.class)
+    @Test(expected = ArgumentosInvalidadosException.class)
     public void deveLançarExcecaoAcaoNaoEncontradaExceptionQuandoOcorrerDataIntegrityViolationException() throws SalveMinhaCarteiraException {
         var ex = mock(SQLIntegrityConstraintViolationException.class);
         when(ex.getErrorCode()).thenReturn(Erros.MYSQL_ER_NO_REFERENCED_ROW_2);

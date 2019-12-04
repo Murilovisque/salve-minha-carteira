@@ -7,12 +7,10 @@ import javax.transaction.Transactional;
 import javax.validation.Validator;
 
 import com.salveminhacarteira.acao.Acao;
-import com.salveminhacarteira.acao.excecoes.AcaoNaoEncontradaException;
 import com.salveminhacarteira.excecoes.ArgumentosInvalidadosException;
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
 import com.salveminhacarteira.seguranca.TokenManager;
 import com.salveminhacarteira.usuario.Usuario;
-import com.salveminhacarteira.usuario.excecoes.UsuarioJaCadastradoException;
 import com.salveminhacarteira.utilitarios.Erros;
 
 import org.slf4j.Logger;
@@ -29,23 +27,14 @@ public class BoletaManager {
     @Autowired
     private BoletaRepository boletaRepository;
 
-    // @Autowired
-    // private AcaoManager acaoManager;
-
     @Autowired
     private Validator validator;
 
     @Autowired
     private TokenManager tokenManager;
 
-    // public List<BoletasAgrupadasPelaDaAcao> getBoletasAgrupadasPorAcao() {
-    //     return null;
-    // }
-
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void cadastrar(Boleta.Tipo tipo, LocalDate data, BigDecimal valor, Integer quantidade, Long idAcao) throws SalveMinhaCarteiraException {
-        // var acao = acaoManager.obterAcaoPeloCodigoNegociacaoPapel(codigoNegociacaoPapel)
-        //     .orElseThrow(() -> new ArgumentosInvalidadosException("Código de negociação do papel é inválido"));
         var boleta = new Boleta(tipo, data, valor, quantidade, new Acao(), new Usuario());
         var erros = validator.validate(boleta);
         if (!erros.isEmpty())
@@ -55,7 +44,7 @@ public class BoletaManager {
         } catch (DataIntegrityViolationException ex) {
             if (Erros.ehAssociacaoDeEntidadeNaoExistente(ex)) {
                 logger.info("Acao com id {} não existe", idAcao);
-                throw new AcaoNaoEncontradaException();
+                throw new ArgumentosInvalidadosException("Ação inválida");
             }
             logger.error(ex.toString());
             throw new SalveMinhaCarteiraException();
