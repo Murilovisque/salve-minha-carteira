@@ -33,12 +33,12 @@ public class ValidadorTokenRequisicaoFilter extends OncePerRequestFilter {
             if (tokenHeader == null || !tokenHeader.startsWith(BEARER_PREFIX))
                 throw new TokenException();
             var token = tokenManager.decodificarToken(tokenHeader.replace(BEARER_PREFIX, ""));
+            request.setAttribute(TokenManager.REQUEST_ATTRIBUTE_NAME, token);
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(token.getEmail(), null, Collections.emptyList()));
         } catch (TokenException ex) {
         } finally {
             filterChain.doFilter(request, response);
         }
-        
     }
 
 }

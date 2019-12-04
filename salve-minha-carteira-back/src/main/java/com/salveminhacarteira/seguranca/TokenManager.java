@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -25,9 +26,13 @@ public class TokenManager {
 
     private static final Logger logger = LoggerFactory.getLogger(TokenManager.class);
     private static final String EMAIL_CLAIM = "email";
+    static final String REQUEST_ATTRIBUTE_NAME = "token";
 
     @Autowired
     private TokenConfig tokenConfig;
+
+    @Autowired
+    private HttpServletRequest httpRequest;
 
     protected JWTVerifier verificadorDeTokens;
 
@@ -52,6 +57,10 @@ public class TokenManager {
             logger.error("Erro ao gerar um token JWT", e);
             throw new SalveMinhaCarteiraException();
         }
+    }
+
+    public Token obterTokenDaRequisicao() {
+        return (Token) httpRequest.getAttribute(REQUEST_ATTRIBUTE_NAME);
     }
 
     Token decodificarToken(String token) throws TokenException {

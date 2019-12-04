@@ -1,11 +1,9 @@
 package com.salveminhacarteira.usuario;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collections;
 
 import javax.validation.Validator;
 
-import com.salveminhacarteira.SalveMinhaCarteiraBackApplication;
 import com.salveminhacarteira.excecoes.ArgumentosInvalidadosException;
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
 import com.salveminhacarteira.seguranca.Token;

@@ -25,10 +25,12 @@ CREATE TABLE IF NOT EXISTS usuario(
 CREATE TABLE IF NOT EXISTS boleta(
     id BIGINT NOT NULL AUTO_INCREMENT,
     id_acao BIGINT NOT NULL,
+    id_usuario BIGINT NOT NULL,
     tipo VARCHAR(10) NOT NULL,
-    data DATETIME NOT NULL,
+    data DATE NOT NULL,
     valor DECIMAL(10, 2) NOT NULL,
     quantidade INTEGER NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(id_acao) REFERENCES acao(id)
+    FOREIGN KEY(id_acao) REFERENCES acao(id),
+    FOREIGN KEY(id_usuario) REFERENCES usuario(id)
 );

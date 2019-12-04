@@ -6,8 +6,9 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -34,6 +35,9 @@ public class TokenManagerTests {
 
     @MockBean
     private TokenConfig tokenConfig;
+
+    @MockBean
+    private HttpServletRequest httpRequest;
 
     private CustomClock customClock;
 

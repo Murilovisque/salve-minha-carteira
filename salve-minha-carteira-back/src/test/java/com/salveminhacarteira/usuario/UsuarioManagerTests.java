@@ -10,6 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Arrays;
 
 import javax.validation.Validation;
@@ -17,6 +18,8 @@ import javax.validation.Validator;
 
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
 import com.salveminhacarteira.seguranca.TokenManager;
+import com.salveminhacarteira.usuario.excecoes.UsuarioJaCadastradoException;
+import com.salveminhacarteira.utilitarios.Erros;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -70,6 +74,14 @@ public class UsuarioManagerTests {
         verificarSeCadastrarUsuarioFalha("", "", usuarioOK().getSenha(), MensagensUsuario.NOME_INVALIDO, MensagensUsuario.EMAIL_INVALIDO);
         verificarSeCadastrarUsuarioFalha("", "", "", MensagensUsuario.NOME_INVALIDO, MensagensUsuario.EMAIL_INVALIDO, MensagensUsuario.SENHA_INVALIDA);
         verificarSeCadastrarUsuarioFalha(null, usuarioOK().getEmail(), usuarioOK().getSenha(), MensagensUsuario.NOME_INVALIDO);
+    }
+
+    @Test(expected = UsuarioJaCadastradoException.class)
+    public void deveLançarUsuarioJaCadastradoExceptionQuandoOcorrerDataIntegrityViolationException() throws SalveMinhaCarteiraException {
+        var ex = mock(SQLIntegrityConstraintViolationException.class);
+        when(ex.getErrorCode()).thenReturn(Erros.MYSQL_DUPLICATE_ENTRY_CODE);        
+        when(usuarioRepository.save(any())).thenThrow(new DataIntegrityViolationException("Error constraint", ex));
+        usuarioManager.cadastrar(usuarioOK().getNome(), usuarioOK().getEmail(), usuarioOK().getSenha());
     }
 
     private void verificarSeCadastrarUsuarioFalha(String nome, String email, String senha, String... erros) {

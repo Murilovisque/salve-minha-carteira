@@ -19,4 +19,11 @@ public class Empresa {
     private Long id;
   
     private String nome;
+
+
+    Empresa() {}
+
+    Empresa(String nome) {
+        this.nome = nome;
+    }
 }

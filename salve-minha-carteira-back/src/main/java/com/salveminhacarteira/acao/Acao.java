@@ -1,5 +1,6 @@
 package com.salveminhacarteira.acao;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,7 +28,15 @@ public class Acao {
     @Column(name = "cod_negociacao")
     private String codigoNegociacaoPapel;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_empresa")
     private Empresa empresa;
+
+    public Acao() {}
+
+    Acao(String codigoNegociacaoPapel, Empresa empresa) {
+        this.codigoNegociacaoPapel = codigoNegociacaoPapel;
+        this.empresa = empresa;
+    }
+
 }

@@ -40,7 +40,11 @@ public class Usuario {
         this.senha = senha;
     }
 
-    Usuario() {}
+    public Usuario() {}
+
+    public Usuario(Long id) {
+        this.id = id;
+    }
 
     void encriptarSenha(PasswordEncoder encriptadorDeSenha) {
         this.senha = encriptadorDeSenha.encode(senha);
