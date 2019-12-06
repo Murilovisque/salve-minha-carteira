@@ -1,0 +1,16 @@
+version: '3'
+services:
+  salve-minha-carteira-front:
+    build: ./extras/docker    
+    volumes:
+     - .:/salve-minha-carteira-front
+    network_mode: "host"
+  angular-karma:
+    image: "trion/ng-cli-karma:latest"
+    depends_on:
+     - "salve-minha-carteira-front"
+    command: /salve-minha-carteira-front/node_modules/.bin/ng test
+    volumes:
+     - .:/salve-minha-carteira-front
+    working_dir: /salve-minha-carteira-front
+    network_mode: "host"

@@ -2,7 +2,7 @@
 
 npm install
 # Set permission to handling off the container
-while [ true ]; do for i in $(find /salve-minha-carteira-front -user root); do chown $us_id:$gr_id $i; done; sleep 1; done &
+echo 'while [ true ]; do for i in $(find /salve-minha-carteira-front -user root); do chown ${us_id}:${gr_id} ${i}; done; sleep 1; done &' >> /root/.bashrc
 
 # Nginx config
 rm -rf /etc/nginx/nginx.conf
