@@ -12,7 +12,6 @@ import { NotificadorService } from 'src/app/notificacao/notificador.service';
 export class CadastroUsuarioComponent implements OnInit {
 
   cadastroRealizado = false;
-  usuario = new Usuario();
 
   usuarioForm = this.fb.group({
     nome: ['', [Validators.required, Validators.maxLength(50)]],
@@ -50,11 +49,4 @@ function validaMesmaSenha(): ValidatorFn {
       && control.get('confirmaSenha').value !== control.get('senha').value
       ? { 'senhaNaoConfirmada': true } : null
   }
-}
-
-class Usuario {
-  nome: string
-  email: string
-  senha: string
-  confirmaSenha: string
 }
