@@ -31,7 +31,7 @@ class UsuarioResources {
 
     @RequestMapping("/autenticar")
     @PostMapping
-    public ResponseEntity<?> autenticar(@RequestParam("email") String email, @RequestParam("senha") String senha) throws SalveMinhaCarteiraException {
+    public ResponseEntity<Token> autenticar(@RequestParam("email") String email, @RequestParam("senha") String senha) throws SalveMinhaCarteiraException {
         return ResponseEntity.ok(new Token(usuarioManager.autenticarEhObterToken(email, senha).getHash()));
     }
 

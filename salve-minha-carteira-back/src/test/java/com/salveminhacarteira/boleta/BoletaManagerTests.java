@@ -52,7 +52,7 @@ public class BoletaManagerTests {
     @Test
     public void deveCadastrarBoletaComSucesso() throws SalveMinhaCarteiraException {
         
-        boletaManager.cadastrar(boletaok.getTipo(), boletaok.getData(), boletaok.getValor(), boletaok.getQuantidade(), boletaok.getAcao().getId());
+        boletaManager.cadastrarOuAtualizar(boletaok.getTipo(), boletaok.getData(), boletaok.getValor(), boletaok.getQuantidade(), boletaok.getAcao().getId());
         verify(boletaRepository, times(1)).salvar(eq(boletaok.getTipo().name()), eq(boletaok.getData()), eq(boletaok.getValor()),
             eq(boletaok.getQuantidade()), eq(boletaok.getAcao().getId()), eq(tokenOK().getIdUsuario()));
     }
@@ -63,7 +63,7 @@ public class BoletaManagerTests {
         when(ex.getErrorCode()).thenReturn(Erros.MYSQL_ER_NO_REFERENCED_ROW_2);
         doThrow(new DataIntegrityViolationException("Error constraint", ex)).when(boletaRepository).salvar(eq(boletaok.getTipo().name()), eq(boletaok.getData()), eq(boletaok.getValor()),
             eq(boletaok.getQuantidade()), eq(boletaok.getAcao().getId()), eq(tokenOK().getIdUsuario()));
-        boletaManager.cadastrar(boletaok.getTipo(), boletaok.getData(), boletaok.getValor(), boletaok.getQuantidade(), boletaok.getAcao().getId());
+        boletaManager.cadastrarOuAtualizar(boletaok.getTipo(), boletaok.getData(), boletaok.getValor(), boletaok.getQuantidade(), boletaok.getAcao().getId());
     }
 
     @TestConfiguration

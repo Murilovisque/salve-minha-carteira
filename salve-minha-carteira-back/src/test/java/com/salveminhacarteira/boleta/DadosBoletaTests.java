@@ -15,7 +15,7 @@ public final class DadosBoletaTests {
         return new Boleta(tipoBoleta, LocalDate.now(), new BigDecimal("10.00"), 2, acaoOK(), usuarioOK());
     }
 
-    public static Boleta boletaOK(Tipo tipoBoleta, Usuario usuario) {
-        return new Boleta(tipoBoleta, LocalDate.now(), new BigDecimal("10.00"), 2, acaoOK(), usuario);
+    public static Boleta boleta2OK(Tipo tipoBoleta, Usuario usuario) {
+        return new Boleta(tipoBoleta, LocalDate.now(), new BigDecimal("15.00"), 4, acao2OK(), usuario);
     }
 }

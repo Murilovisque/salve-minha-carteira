@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -27,6 +29,7 @@ import lombok.Getter;
 @Entity
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames={"id_acao", "tipo", "data"})})
 public class Boleta {
 
     @Id
@@ -71,6 +74,10 @@ public class Boleta {
 
     public static enum Tipo {
         VENDA, COMPRA
+    }
+
+    public void incrementarQuantidade(Boleta boleta) {
+        this.quantidade += boleta.quantidade;
     }
 
 }

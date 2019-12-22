@@ -34,3 +34,5 @@ CREATE TABLE IF NOT EXISTS boleta(
     FOREIGN KEY(id_acao) REFERENCES acao(id),
     FOREIGN KEY(id_usuario) REFERENCES usuario(id)
 );
+
+ALTER TABLE boleta ADD UNIQUE unique_boleta_acao_tipo_data_valor(id_acao, tipo, data, valor);

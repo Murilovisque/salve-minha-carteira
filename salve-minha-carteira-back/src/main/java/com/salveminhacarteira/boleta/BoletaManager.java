@@ -2,11 +2,13 @@ package com.salveminhacarteira.boleta;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
 import javax.validation.Validator;
 
 import com.salveminhacarteira.acao.Acao;
+import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloCodigoNegociacao;
 import com.salveminhacarteira.excecoes.ArgumentosInvalidadosException;
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
 import com.salveminhacarteira.seguranca.TokenManager;
@@ -33,21 +35,36 @@ public class BoletaManager {
     @Autowired
     private TokenManager tokenManager;
 
-    @Transactional(rollbackOn = Exception.class)
-    public void cadastrar(Boleta.Tipo tipo, LocalDate data, BigDecimal valor, Integer quantidade, Long idAcao) throws SalveMinhaCarteiraException {
+    public void cadastrarOuAtualizar(Boleta.Tipo tipo, LocalDate data, BigDecimal valor, Integer quantidade, Long idAcao) throws SalveMinhaCarteiraException {
         var boleta = new Boleta(tipo, data, valor, quantidade, new Acao(), new Usuario());
         var erros = validator.validate(boleta);
         if (!erros.isEmpty())
             throw new ArgumentosInvalidadosException(erros);
+        var idUsuario = tokenManager.obterTokenDaRequisicao().getIdUsuario();
         try {
-            boletaRepository.salvar(tipo.name(), data, valor, quantidade, idAcao, tokenManager.obterTokenDaRequisicao().getIdUsuario());
+            boletaRepository.salvar(tipo.name(), data, valor, quantidade, idAcao, idUsuario);
+            logger.info("Boleta de {} e data {} foi cadastrado", tipo, data);
         } catch (DataIntegrityViolationException ex) {
             if (Erros.ehAssociacaoDeEntidadeNaoExistente(ex)) {
                 logger.info("Acao com id {} não existe", idAcao);
                 throw new ArgumentosInvalidadosException("Ação inválida");
             }
-            logger.error(ex.toString());
-            throw new SalveMinhaCarteiraException();
+            if (Erros.ehRegistroDuplicado(ex)) {
+                logger.info("Boleta nessa data, tipo, acao e valor já existe. Será incrementado a quantidade e atualizado");
+                var boletaExistente = boletaRepository.obterBoletaPeloTipoDataUsuarioAcaoEhValor(tipo.name(), data, idUsuario, idAcao, valor).get();
+                boletaExistente.incrementarQuantidade(boleta);
+                boletaRepository.save(boletaExistente);                
+                logger.info("Boleta de {} e data {} foi atualizado", tipo, data);
+            } else {
+                logger.error(ex.toString());
+                throw new SalveMinhaCarteiraException();
+            }
         }
+    }
+
+    public List<?> obterBoletasAgrupadasPeloCodigoNegociacaoComSaldoPositivo() {
+        var idUsuario = tokenManager.obterTokenDaRequisicao().getIdUsuario();
+        var listaAgrupada = boletaRepository.obterBoletasAgrupadasPeloCodigoNegociacao(idUsuario);
+        listaAgrupada.stream().collect(Collectors.groupingBy(BoletaAgrupadoPeloCodigoNegociacao::getCodigoNegociacaoPapel, Collectors.reducing((b1, b2) -> b1.)));
     }
 }

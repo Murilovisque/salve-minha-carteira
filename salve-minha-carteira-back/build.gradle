@@ -4,6 +4,7 @@ plugins {
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'application'
 
 group = 'com.salveminhacarteira'
 version = '0.0.1-SNAPSHOT'
@@ -33,3 +34,5 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'com.auth0:java-jwt:3.8.2'
 }
+
+applicationDefaultJvmArgs = ["-Duser.country=BR -Duser.language=pt"]
