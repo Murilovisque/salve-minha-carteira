@@ -2,7 +2,6 @@ package com.salveminhacarteira.boleta;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -73,13 +72,16 @@ public class Boleta {
     }
 
     public static enum Tipo {
-        VENDA, COMPRA
+        VENDA, COMPRA;
+
+        public Tipo obterOhInverso() {
+            return this.equals(COMPRA)? VENDA : COMPRA;
+        }
     }
 
     public void incrementarQuantidade(Boleta boleta) {
         this.quantidade += boleta.quantidade;
     }
-
 }
 
 

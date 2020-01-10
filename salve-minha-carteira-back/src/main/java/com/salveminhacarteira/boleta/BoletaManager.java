@@ -3,12 +3,13 @@ package com.salveminhacarteira.boleta;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.*;
 
 import javax.validation.Validator;
 
 import com.salveminhacarteira.acao.Acao;
 import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloCodigoNegociacao;
+import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloTipoEhCodigoNegociacao;
 import com.salveminhacarteira.excecoes.ArgumentosInvalidadosException;
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
 import com.salveminhacarteira.seguranca.TokenManager;
@@ -41,6 +42,11 @@ public class BoletaManager {
         if (!erros.isEmpty())
             throw new ArgumentosInvalidadosException(erros);
         var idUsuario = tokenManager.obterTokenDaRequisicao().getIdUsuario();
+        if (tipo.equals(Boleta.Tipo.VENDA)) {
+            var quantidadeJaComprada = boletaRepository.obterQuantidadeTotalPeloTipoEhAcao(idUsuario, Boleta.Tipo.COMPRA.name(), idAcao);
+            if (!quantidadeJaComprada.isPresent() || quantidade > quantidadeJaComprada.get())
+                throw new ArgumentosInvalidadosException("Não é possível cadastrar " + quantidade + "venda(s) dessa ação pois não há ações compradas suficiente");
+        }
         try {
             boletaRepository.salvar(tipo.name(), data, valor, quantidade, idAcao, idUsuario);
             logger.info("Boleta de {} e data {} foi cadastrado", tipo, data);
@@ -50,8 +56,8 @@ public class BoletaManager {
                 throw new ArgumentosInvalidadosException("Ação inválida");
             }
             if (Erros.ehRegistroDuplicado(ex)) {
-                logger.info("Boleta nessa data, tipo, acao e valor já existe. Será incrementado a quantidade e atualizado");
-                var boletaExistente = boletaRepository.obterBoletaPeloTipoDataUsuarioAcaoEhValor(tipo.name(), data, idUsuario, idAcao, valor).get();
+                logger.info("Boleta nessa data, tipo, acao e valor já existe. A quantidade será incrementada e atualizada");
+                var boletaExistente = boletaRepository.obterBoletaPeloTipoDataAcaoEhValor(idUsuario, tipo.name(), data, idAcao, valor).get();
                 boletaExistente.incrementarQuantidade(boleta);
                 boletaRepository.save(boletaExistente);                
                 logger.info("Boleta de {} e data {} foi atualizado", tipo, data);
@@ -62,9 +68,14 @@ public class BoletaManager {
         }
     }
 
-    public List<?> obterBoletasAgrupadasPeloCodigoNegociacaoComSaldoPositivo() {
+    public List<BoletaAgrupadoPeloCodigoNegociacao> obterBoletasAgrupadasPeloCodigoNegociacaoComSaldoPositivo() {
         var idUsuario = tokenManager.obterTokenDaRequisicao().getIdUsuario();
-        var listaAgrupada = boletaRepository.obterBoletasAgrupadasPeloCodigoNegociacao(idUsuario);
-        listaAgrupada.stream().collect(Collectors.groupingBy(BoletaAgrupadoPeloCodigoNegociacao::getCodigoNegociacaoPapel, Collectors.reducing((b1, b2) -> b1.)));
+        var listaAgrupada = boletaRepository.obterBoletasAgrupadasPeloTipoEhCodigoNegociacao(idUsuario);
+        var resultado = listaAgrupada.stream().collect(
+            groupingBy(BoletaAgrupadoPeloTipoEhCodigoNegociacao::getCodigoNegociacaoPapel, reducing(BoletaAgrupadoPeloTipoEhCodigoNegociacao::mesclarPelaQuantidade))).
+                entrySet().stream().filter(e -> e.getValue().isPresent() && e.getValue().get().getQuantidadeTotal() > 0).
+                    map(e -> new BoletaAgrupadoPeloCodigoNegociacao(e.getKey(), e.getValue().get().getQuantidadeTotal())).collect(toList());
+        logger.info("Listando boletas agrupadas. Quantidade: {}", resultado.size());
+        return resultado;
     }
 }

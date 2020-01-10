@@ -2,8 +2,10 @@ package com.salveminhacarteira.boleta;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.salveminhacarteira.boleta.Boleta.Tipo;
+import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloCodigoNegociacao;
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,9 +36,9 @@ class BoletaResources {
         boletaManager.cadastrarOuAtualizar(tipo, data, BigDecimal.valueOf(valor), quantidade, idAcao);
     }
 
-    // @GetMapping
-    // @ResponseStatus(code = HttpStatus.OK)
-    // public ResponseEntity<?> obterBoletasAgrupadasPeloCodigoNegociacaoPositivas() {
-        
-    // }
+    @GetMapping
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<List<BoletaAgrupadoPeloCodigoNegociacao>> obterBoletasAgrupadasPeloCodigoNegociacaoPositivas() {
+        return ResponseEntity.ok(boletaManager.obterBoletasAgrupadasPeloCodigoNegociacaoComSaldoPositivo());
+    }
 }

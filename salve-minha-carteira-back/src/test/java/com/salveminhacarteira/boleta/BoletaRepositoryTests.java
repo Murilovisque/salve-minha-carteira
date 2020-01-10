@@ -1,19 +1,19 @@
 package com.salveminhacarteira.boleta;
 
 import static com.salveminhacarteira.boleta.DadosBoletaTests.boleta2OK;
+import static com.salveminhacarteira.boleta.DadosBoletaTests.boleta3OK;
 import static com.salveminhacarteira.boleta.DadosBoletaTests.boletaOK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.salveminhacarteira.acao.Acao;
 import com.salveminhacarteira.boleta.Boleta.Tipo;
-import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloCodigoNegociacao;
+import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloTipoEhCodigoNegociacao;
 import com.salveminhacarteira.empresa.Empresa;
 import com.salveminhacarteira.usuario.Usuario;
 import com.salveminhacarteira.utilitarios.Checador;
@@ -38,13 +38,13 @@ public class BoletaRepositoryTests {
     @Autowired
     private BoletaRepository boletaRepository;
 
-    private Boleta boletaok = boletaOK(Tipo.COMPRA);
+    private Boleta boletaok;
     private Boleta boleta2ok;
 
     @Before
     public void deveCadastrarBoletaJuntoComAcaoEhUsuario() {
         assertFalse(boletaRepository.findById(1L).isPresent() || boletaRepository.findById(2L).isPresent());
-        boletaok = boletaRepository.save(boletaok);
+        boletaok = boletaRepository.save(boletaOK(Tipo.COMPRA));
         testarSeAhBoletaEhOK(boletaok, boletaRepository.findById(1L));
         boleta2ok = boleta2OK(Tipo.COMPRA, boletaok.getUsuario());
         boletaRepository.save(boleta2ok);        
@@ -60,38 +60,38 @@ public class BoletaRepositoryTests {
 
     @Test
     public void devolverBoletosAgrupadosPeloCodigoNegociacaoPeloTipo() {
-        var boletaAgrupadook = BoletaAgrupadoPeloCodigoNegociacao.build(boletaok.getTipo(), boletaok.getAcao().getCodigoNegociacaoPapel(),
-            boletaok.getValor().multiply(new BigDecimal(boletaok.getQuantidade())), boletaok.getQuantidade());
-        var boletaAgrupado2ok = BoletaAgrupadoPeloCodigoNegociacao.build(boleta2ok.getTipo(), boleta2ok.getAcao().getCodigoNegociacaoPapel(),
-            boleta2ok.getValor().multiply(new BigDecimal(boleta2ok.getQuantidade())), boleta2ok.getQuantidade());
+        var boletaAgrupadook = BoletaAgrupadoPeloTipoEhCodigoNegociacao.construir(boletaok.getTipo(), 
+            boletaok.getAcao().getCodigoNegociacaoPapel(), boletaok.getQuantidade());
+        var boletaAgrupado2ok = BoletaAgrupadoPeloTipoEhCodigoNegociacao.construir(boleta2ok.getTipo(),
+            boleta2ok.getAcao().getCodigoNegociacaoPapel(), boleta2ok.getQuantidade());
 
-        List<BoletaAgrupadoPeloCodigoNegociacao> listEsperada = new ArrayList<>(List.of(boletaAgrupadook, boletaAgrupado2ok));
-        var listAgrupado = boletaRepository.obterBoletasAgrupadasPeloCodigoNegociacaoComTipo(boletaok.getTipo().name(), boletaok.getUsuario().getId());
+        var listEsperada = new ArrayList<>(List.of(boletaAgrupadook, boletaAgrupado2ok));
+        var listAgrupado = boletaRepository.obterBoletasAgrupadasPeloTipoEhCodigoNegociacaoBuscandoPeloTipo(boletaok.getUsuario().getId(), boletaok.getTipo().name());
         assertFalse(listAgrupado.isEmpty());
 
         Checador.validarListas(listEsperada, listAgrupado, (esperado, recebido) -> esperado.getCodigoNegociacaoPapel().equals(recebido.getCodigoNegociacaoPapel())
             && esperado.getQuantidadeTotal().equals(recebido.getQuantidadeTotal())
-            && esperado.getSomaTotal().equals(recebido.getSomaTotal()) && esperado.getTipo().equals(recebido.getTipo()));
+            && esperado.getTipo().equals(recebido.getTipo()));
     }
 
     @Test
-    public void devolverBoletosAgrupadosPeloCodigoNegociacao() {
+    public void devolverBoletosAgrupadosPeloTipoEhCodigoNegociacao() {
         var boleta = boletaOK(Tipo.VENDA);
         boletaRepository.salvar(boleta.getTipo().name(), boleta.getData(), boleta.getValor(), boleta.getQuantidade(), 1L, 1L);
-        var boletaAgrupadoCompraok = BoletaAgrupadoPeloCodigoNegociacao.build(boletaok.getTipo(), boletaok.getAcao().getCodigoNegociacaoPapel(),
-            boletaok.getValor().multiply(new BigDecimal(boletaok.getQuantidade())), boletaok.getQuantidade());
-        var boletaAgrupado2Compraok = BoletaAgrupadoPeloCodigoNegociacao.build(boleta2ok.getTipo(), boleta2ok.getAcao().getCodigoNegociacaoPapel(),
-            boleta2ok.getValor().multiply(new BigDecimal(boleta2ok.getQuantidade())), boleta2ok.getQuantidade());            
-        var boletaAgrupadoVendaok = BoletaAgrupadoPeloCodigoNegociacao.build(boleta.getTipo(), boleta.getAcao().getCodigoNegociacaoPapel(),
-        boleta.getValor().multiply(new BigDecimal(boleta.getQuantidade())), boleta.getQuantidade());
+        var boletaAgrupadoVendaok = BoletaAgrupadoPeloTipoEhCodigoNegociacao.construir(boleta.getTipo(),
+            boleta.getAcao().getCodigoNegociacaoPapel(), boleta.getQuantidade());
+        var boletaAgrupadoCompraok = BoletaAgrupadoPeloTipoEhCodigoNegociacao.construir(boletaok.getTipo(), 
+            boletaok.getAcao().getCodigoNegociacaoPapel(), boletaok.getQuantidade());
+        var boletaAgrupado2Compraok = BoletaAgrupadoPeloTipoEhCodigoNegociacao.construir(boleta2ok.getTipo(), 
+            boleta2ok.getAcao().getCodigoNegociacaoPapel(), boleta2ok.getQuantidade());            
      
-        List<BoletaAgrupadoPeloCodigoNegociacao> listEsperada = new ArrayList<>(List.of(boletaAgrupadoCompraok, boletaAgrupado2Compraok, boletaAgrupadoVendaok));
-        var listAgrupado = boletaRepository.obterBoletasAgrupadasPeloCodigoNegociacao(boletaok.getUsuario().getId());
+        var listEsperada = new ArrayList<>(List.of(boletaAgrupadoCompraok, boletaAgrupado2Compraok, boletaAgrupadoVendaok));
+        var listAgrupado = boletaRepository.obterBoletasAgrupadasPeloTipoEhCodigoNegociacao(boletaok.getUsuario().getId());
         assertFalse(listAgrupado.isEmpty());
 
         Checador.validarListas(listEsperada, listAgrupado, (esperado, recebido) -> esperado.getCodigoNegociacaoPapel().equals(recebido.getCodigoNegociacaoPapel())
             && esperado.getQuantidadeTotal().equals(recebido.getQuantidadeTotal())
-            && esperado.getSomaTotal().equals(recebido.getSomaTotal()) && esperado.getTipo().equals(recebido.getTipo()));
+            && esperado.getTipo().equals(recebido.getTipo()));
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -106,8 +106,18 @@ public class BoletaRepositoryTests {
 
     @Test()
     public void obterBoletaPeloTipoDataUsuarioAcaoEhValor() {
-        var boletaPeloTipoEhData = boletaRepository.obterBoletaPeloTipoDataUsuarioAcaoEhValor(boletaok.getTipo().name(), boletaok.getData(), boletaok.getUsuario().getId(), boletaok.getAcao().getId(), boletaok.getValor());
+        var boletaPeloTipoEhData = boletaRepository.obterBoletaPeloTipoDataAcaoEhValor(boletaok.getUsuario().getId(), boletaok.getTipo().name(), boletaok.getData(), boletaok.getAcao().getId(), boletaok.getValor());
         testarSeAhBoletaEhOK(boletaok, boletaPeloTipoEhData);
+    }
+
+    @Test()
+    public void obterQuantidadeTotalDeBoletaCompra() {
+        var boleta = boleta3OK(Tipo.COMPRA);
+        boletaRepository.salvar(boleta.getTipo().name(), boleta.getData(), boleta.getValor(), boleta.getQuantidade(), 1L, 1L);
+        var quantidadeEsperada = boletaok.getQuantidade() + boleta.getQuantidade();
+        var quantidadeChecada = boletaRepository.obterQuantidadeTotalPeloTipoEhAcao(boletaok.getUsuario().getId(), boletaok.getTipo().name(), boletaok.getAcao().getId());
+        assertTrue(quantidadeChecada.isPresent());
+        assertEquals(quantidadeEsperada, quantidadeChecada.get().intValue());
     }
     
     private void testarSeAhBoletaEhOK(Boleta boletaEsperada, Optional<Boleta> boleta) {
@@ -119,7 +129,4 @@ public class BoletaRepositoryTests {
         assertEquals(boletaEsperada.getAcao().getCodigoNegociacaoPapel(), boleta.get().getAcao().getCodigoNegociacaoPapel());
         assertEquals(boletaEsperada.getUsuario().getNome(), boleta.get().getUsuario().getNome());
     }
-
-
-    
 }
