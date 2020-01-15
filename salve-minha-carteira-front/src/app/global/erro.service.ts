@@ -11,35 +11,35 @@ import { Recursos } from './recursos';
 })
 export class ErroService {
 
-  constructor(private router: Router, private notificaoService: NotificadorService) { }
+	constructor(private router: Router, private notificaoService: NotificadorService) { }
 
-  mapearErro(err :any) :Observable<never> {
-    if (err instanceof HttpErrorResponse) {
-        switch(err.status) {
-            case 400:
-                return throwError(new ArgumentosInvalidosError(err.error.message));
-            case 409:
-                return throwError(new JaExisteError(err.error));
-			case 401:
-				return throwError(new UsuarioNaoAutenticadoError());                
-        }
-    }
-    return throwError(new SalveMinhaCarteiraError())
-  }
+	mapearErro(err :any) :Observable<never> {
+		if (err instanceof HttpErrorResponse) {
+			switch(err.status) {
+				case 400:
+					return throwError(new ArgumentosInvalidosError(err.error.message));
+				case 409:
+					return throwError(new JaExisteError(err.error));
+				case 401:
+					return throwError(new UsuarioNaoAutenticadoError());                
+			}
+		}
+		return throwError(new SalveMinhaCarteiraError())
+	}
 
-  retentarRequisicaoHTTP(tentativas: Observable<any>, quantidadeRetentativas: number = 2, intervaloEntreRetentativas: number = 500): Observable<any> {
-      return tentativas.pipe(mergeMap((error, i) => {
-          if (error instanceof HttpErrorResponse && (error.status == 0 || error.status >= 500) && i + 1 < quantidadeRetentativas)
-              return timer(intervaloEntreRetentativas);
-          return throwError(error);          
-      }))
-  }
+	retentarRequisicaoHTTP(tentativas: Observable<any>, quantidadeRetentativas: number = 2, intervaloEntreRetentativas: number = 500): Observable<any> {
+		return tentativas.pipe(mergeMap((error, i) => {
+			if (error instanceof HttpErrorResponse && (error.status == 0 || error.status >= 500) && i + 1 < quantidadeRetentativas)
+				return timer(intervaloEntreRetentativas);
+			return throwError(error);          
+		}))
+	}
 
-  tratar(ex: SalveMinhaCarteiraError) {
-	this.notificaoService.adicionarAlertaErro(ex.message);
-	  if (ex instanceof UsuarioNaoAutenticadoError)
-	  	this.router.navigate([Recursos.PAGINA_LOGIN]);	  	
-  }
+	tratarRecursosAutenticados(ex: SalveMinhaCarteiraError) {
+		this.notificaoService.adicionarAlertaErro(ex.message);
+		if (ex instanceof UsuarioNaoAutenticadoError)
+			this.router.navigate([Recursos.PAGINA_LOGIN]);	  	
+	}
 }
 
 export class SalveMinhaCarteiraError implements Error {

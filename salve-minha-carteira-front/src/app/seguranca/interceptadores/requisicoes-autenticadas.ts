@@ -24,7 +24,6 @@ export class RequisicoesAutenticadas implements HttpInterceptor {
             }),
             catchError((err) => {
                 if (err instanceof UsuarioNaoAutenticadoError) {
-                    this.tokenService.removerTokenAutenticacao().subscribe();
                     return throwError(new HttpErrorResponse({status: 401, statusText: "401"}))
                 } else {
                     if (err instanceof HttpErrorResponse && err.status == 401)

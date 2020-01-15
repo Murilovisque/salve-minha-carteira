@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.boletaService.obterBoletasAgrupadas().subscribe(
       boletas => this.boletasAgrupadas = boletas,
-      err => this.erroService.tratar(err as SalveMinhaCarteiraError)
+      err => this.erroService.tratarRecursosAutenticados(err as SalveMinhaCarteiraError)
     );
   }
 
