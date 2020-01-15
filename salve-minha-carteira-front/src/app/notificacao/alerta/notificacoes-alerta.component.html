@@ -2,7 +2,7 @@
         (hide)="notificadorService.removerAlerta(notif)" [autohide]="false">
     {{notif.corpo}}
 </ngb-toast> -->
-<p *ngIf="notificadorService.temAlerta()">
+<p *ngIf="notif != null">
     <ngb-alert  [type]="notif.tipo"
-        (close)="notificadorService.removerAlerta()"><strong>{{ notif.titulo}} - </strong>{{ notif.corpo }}</ngb-alert>
+        (close)="notificadorService.removerAlerta()"><strong>{{ notif.titulo }} - </strong>{{ notif.corpo }}</ngb-alert>
 </p>

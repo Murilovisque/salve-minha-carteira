@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import { Notificacao } from 'src/app/entidades/notificacao';
 import { NotificadorService } from '../notificador.service';
 
@@ -7,7 +7,7 @@ import { NotificadorService } from '../notificador.service';
   templateUrl: './notificacoes-alerta.component.html',
   styleUrls: ['./notificacoes-alerta.component.css']
 })
-export class NotificacoesAlertaComponent implements OnInit {
+export class NotificacoesAlertaComponent implements OnInit, DoCheck {
 
   notif: Notificacao
 

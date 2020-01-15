@@ -47,3 +47,10 @@ Executar o comando abaixo no container docker. Irá gerar os arquivos na pasta '
 ```
 ng build --prod
 ```
+
+## Gerar feature module
+
+Executar o comando abaixo no container docker
+```
+ng generate module painel/painel --module app --flat --routing
+```

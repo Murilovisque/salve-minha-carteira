@@ -4,7 +4,7 @@ import { LoginComponent } from './login.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { UsuarioService } from '../usuario.service';
+import { UsuarioService } from '../../usuario/usuario.service';
 import { NotificadorService } from 'src/app/notificacao/notificador.service';
 
 describe('LoginComponent', () => {

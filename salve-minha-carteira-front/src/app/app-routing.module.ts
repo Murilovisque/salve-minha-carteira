@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { Recursos } from './global/recursos';
 
 
 const routes: Routes = [
-  {path: "", redirectTo: "login", pathMatch: "full"}
+  {path: "", redirectTo: Recursos.PAGINA_LOGIN, pathMatch: "full"}
 ];
 
 @NgModule({

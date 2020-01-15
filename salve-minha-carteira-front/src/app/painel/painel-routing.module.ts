@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CadastroUsuarioComponent } from './cadastro-usuario/cadastro-usuario.component';
 import { Recursos } from '../global/recursos';
+import { HomeComponent } from './home/home.component';
 
 
-const routes: Routes = [  
-  {path: Recursos.PAGINA_CADASTRO_USUARIO, component: CadastroUsuarioComponent}
+const routes: Routes = [
+  {path: Recursos.PAGINA_PAINEL_HOME, component: HomeComponent}
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class UsuarioRoutingModule { }
+export class PainelRoutingModule { }

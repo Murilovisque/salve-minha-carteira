@@ -1,0 +1,17 @@
+<section>
+    <h2>Painel de administração</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Código de Negociação</th>
+                <th scope="col">Quantidade</th>
+            </tr>            
+        </thead>
+        <tbody>
+            <tr *ngFor="let boleta of boletasAgrupadas">
+                <td>{{ boleta.codigoNegociacaoPapel }}</td>
+                <td>{{ boleta.quantidadeTotal }}</td>
+            </tr>            
+        </tbody>
+    </table>
+</section>
