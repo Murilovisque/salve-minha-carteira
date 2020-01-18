@@ -3,10 +3,10 @@ package com.salveminhacarteira.empresa;
 public final class DadosEmpresasTests {
 
     public static Empresa empresaOK() {
-        return new Empresa("Ambev");
+        return new Empresa("AMBEV");
     }
 
     public static Empresa empresa2OK() {
-        return new Empresa("Itausa");
+        return new Empresa("ITAUSA");
     }
 }

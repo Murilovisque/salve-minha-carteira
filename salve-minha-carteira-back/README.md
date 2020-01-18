@@ -19,6 +19,11 @@ run
 debug #aguarda uma conexão remota para debug na porta 5005
 ```
 
+## Executando o testes
+```
+run-tests
+```
+
 ## Criando/atualizando script para popular a tabela de empresas na bolsa
 - Acessar o site da b3 e baixar o arquivo com o histórico anual:
     - http://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/equities/historical-quotes/

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
  
-    <property name="LOGS" value="/tmp/salve-minha-carteira-back" />
+    <property name="LOGS" value="/var/log/salve-minha-carteira-back" />
  
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -28,6 +28,11 @@
     </root>
  
     <logger name="com.salveminhacarteira" level="debug" additivity="false">
+        <appender-ref ref="RollingFile" />
+        <appender-ref ref="Console" />
+    </logger>
+
+    <logger name="logging.level.org.hibernate" level="debug" additivity="false">
         <appender-ref ref="RollingFile" />
         <appender-ref ref="Console" />
     </logger>
