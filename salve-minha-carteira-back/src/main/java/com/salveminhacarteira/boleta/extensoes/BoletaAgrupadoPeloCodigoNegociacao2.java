@@ -1,13 +1,15 @@
 package com.salveminhacarteira.boleta.extensoes;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BoletaAgrupadoPeloCodigoNegociacao {
+public class BoletaAgrupadoPeloCodigoNegociacao2 {
 
-    private Long id;
     private String codigoNegociacaoPapel;
-    private Integer quantidadeTotal;
+    private List<Somatoria> somatorias;
+
 }

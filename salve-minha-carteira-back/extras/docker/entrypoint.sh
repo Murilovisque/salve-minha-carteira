@@ -5,5 +5,6 @@ echo $'while [ true ]; do find /salve-minha-carteira-back -user root -exec chown
 echo "alias debug='./gradlew bootRun --debug-jvm'" >> /root/.bashrc
 echo "alias run='./gradlew bootRun'" >> /root/.bashrc
 echo "alias run-tests='./gradlew test'" >> /root/.bashrc
+echo "alias debug-tests='./gradlew test --debug-jvm'" >> /root/.bashrc
 
 sleep infinity

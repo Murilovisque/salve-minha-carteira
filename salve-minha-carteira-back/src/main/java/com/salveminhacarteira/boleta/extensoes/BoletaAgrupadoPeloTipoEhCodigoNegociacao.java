@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 public interface BoletaAgrupadoPeloTipoEhCodigoNegociacao {
 
+    Long getId();
+
     String getTipo();
 
     @Value("#{target.cod_negociacao}")
@@ -18,7 +20,7 @@ public interface BoletaAgrupadoPeloTipoEhCodigoNegociacao {
         return new BoletaAgrupadoPeloTipoEhCodigoNegociacaoImpl(tipo, codigoNegociacaoPapel, quantidadeTotal);
     }
 
-    default BoletaAgrupadoPeloTipoEhCodigoNegociacao mesclarPelaQuantidade(BoletaAgrupadoPeloTipoEhCodigoNegociacao boletaParaMesclar) {
+    default BoletaAgrupadoPeloTipoEhCodigoNegociacao mesclarSomandoQuantidade(BoletaAgrupadoPeloTipoEhCodigoNegociacao boletaParaMesclar) {
         if (!getCodigoNegociacaoPapel().equals(boletaParaMesclar.getCodigoNegociacaoPapel()))
             throw new IllegalArgumentException("Boleta agrupada não pode ser mesclada pois não tem o mesmo codigo de negociacao do papel");
 
@@ -37,6 +39,7 @@ public interface BoletaAgrupadoPeloTipoEhCodigoNegociacao {
     }
 
     static class BoletaAgrupadoPeloTipoEhCodigoNegociacaoImpl implements BoletaAgrupadoPeloTipoEhCodigoNegociacao {
+        private Long id;
         private Boleta.Tipo tipo;
         private String codigoNegociacaoPapel;
         private Integer quantidadeTotal;
@@ -60,6 +63,11 @@ public interface BoletaAgrupadoPeloTipoEhCodigoNegociacao {
         @Override
         public Integer getQuantidadeTotal() {
             return quantidadeTotal;
+        }
+
+        @Override
+        public Long getId() {
+            return id;
         }
     }
 }

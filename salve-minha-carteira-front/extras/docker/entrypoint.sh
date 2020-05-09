@@ -1,8 +1,9 @@
 #!/bin/bash
 
-npm install
 # Set permission to handling off the container
-echo $'while [ true ]; do find /salve-minha-carteira-front -user root -exec chown -R ${us_id}:${gr_id} \'{}\' +; sleep 1; done &' >> /root/.bashrc
+echo $'while [ true ]; do sleep 2; find /salve-minha-carteira-front -user root -exec chown -R ${us_id}:${gr_id} \'{}\' +; done &' >> /root/.bashrc
+
+npm install
 
 # Nginx config
 rm -rf /etc/nginx/nginx.conf

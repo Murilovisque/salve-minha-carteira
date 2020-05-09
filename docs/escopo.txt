@@ -16,7 +16,7 @@ Versão 1:
         Opção de remoção de ação
     Tela de planejamento
         É uma compra de ações de código que já foram compradas anteriormente?
-            Sim. Deve exibir o menor valor, o maior e a média pagos por daquela ação
+            Sim. Deve exibir o menor valor, o maior e a média pagos daquela ação
         É uma venda de ações
             Campo com o percentual que desejará ter de lucro/
             Venderá todas as ações daquele código?

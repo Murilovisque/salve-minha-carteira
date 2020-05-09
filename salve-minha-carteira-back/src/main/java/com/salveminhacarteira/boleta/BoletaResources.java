@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.salveminhacarteira.boleta.Boleta.Tipo;
 import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloCodigoNegociacao;
+import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloCodigoNegociacao2;
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ class BoletaResources {
 
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<List<BoletaAgrupadoPeloCodigoNegociacao>> obterBoletasAgrupadasPeloCodigoNegociacaoPositivas() {
+    public ResponseEntity<List<BoletaAgrupadoPeloCodigoNegociacao2>> obterBoletasAgrupadasPeloCodigoNegociacaoPositivas() {
         return ResponseEntity.ok(boletaManager.obterBoletasAgrupadasPeloCodigoNegociacaoComSaldoPositivo());
     }
 }

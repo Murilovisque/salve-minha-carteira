@@ -9,7 +9,10 @@ import javax.validation.Validator;
 
 import com.salveminhacarteira.acao.Acao;
 import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloCodigoNegociacao;
+import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloCodigoNegociacao2;
 import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloTipoEhCodigoNegociacao;
+import com.salveminhacarteira.boleta.extensoes.BoletaAgrupadoPeloTipoEhCodigoNegociacao2;
+import com.salveminhacarteira.boleta.extensoes.Somatoria;
 import com.salveminhacarteira.excecoes.ArgumentosInvalidadosException;
 import com.salveminhacarteira.excecoes.SalveMinhaCarteiraException;
 import com.salveminhacarteira.seguranca.TokenManager;
@@ -43,9 +46,9 @@ public class BoletaManager {
             throw new ArgumentosInvalidadosException(erros);
         var idUsuario = tokenManager.obterTokenDaRequisicao().getIdUsuario();
         if (tipo.equals(Boleta.Tipo.VENDA)) {
-            var quantidadeJaComprada = boletaRepository.obterQuantidadeTotalPeloTipoEhAcao(idUsuario, Boleta.Tipo.COMPRA.name(), idAcao);
+            var quantidadeJaComprada = boletaRepository.obterQuantidadeTotalComSaldoPositivoDaAcao(idUsuario, idAcao);
             if (!quantidadeJaComprada.isPresent() || quantidade > quantidadeJaComprada.get())
-                throw new ArgumentosInvalidadosException("Não é possível cadastrar " + quantidade + "venda(s) dessa ação pois não há ações compradas suficiente");
+                throw new ArgumentosInvalidadosException("Não é possível cadastrar " + quantidade + " venda(s) dessa ação pois você tem " + quantidadeJaComprada.get() + " comprada(s)");
         }
         try {
             boletaRepository.salvar(tipo.name(), data, valor, quantidade, idAcao, idUsuario);
@@ -68,13 +71,21 @@ public class BoletaManager {
         }
     }
 
-    public List<BoletaAgrupadoPeloCodigoNegociacao> obterBoletasAgrupadasPeloCodigoNegociacaoComSaldoPositivo() {
+    public List<BoletaAgrupadoPeloCodigoNegociacao2> obterBoletasAgrupadasPeloCodigoNegociacaoComSaldoPositivo() {
         var idUsuario = tokenManager.obterTokenDaRequisicao().getIdUsuario();
-        var listaAgrupada = boletaRepository.obterBoletasAgrupadasPeloTipoEhCodigoNegociacao(idUsuario);
-        var resultado = listaAgrupada.stream().collect(
-            groupingBy(BoletaAgrupadoPeloTipoEhCodigoNegociacao::getCodigoNegociacaoPapel, reducing(BoletaAgrupadoPeloTipoEhCodigoNegociacao::mesclarPelaQuantidade))).
-                entrySet().stream().filter(e -> e.getValue().isPresent() && e.getValue().get().getQuantidadeTotal() > 0).
-                    map(e -> new BoletaAgrupadoPeloCodigoNegociacao(e.getKey(), e.getValue().get().getQuantidadeTotal())).collect(toList());
+        // var listaAgrupada = boletaRepository.obterBoletasAgrupadasPeloTipoEhCodigoNegociacao(idUsuario);
+        // var resultado = listaAgrupada.stream().collect(groupingBy(BoletaAgrupadoPeloTipoEhCodigoNegociacao::getCodigoNegociacaoPapel,
+        //             reducing(BoletaAgrupadoPeloTipoEhCodigoNegociacao::mesclarSomandoQuantidade)))
+        //         .entrySet().stream()
+        //             .filter(e -> e.getValue().isPresent() && e.getValue().get().getTipo().equals(Boleta.Tipo.COMPRA.name())
+        //                 && e.getValue().get().getQuantidadeTotal() > 0)
+        //             .map(e -> new BoletaAgrupadoPeloCodigoNegociacao(e.getValue().get().getId(), e.getKey(), e.getValue().get().getQuantidadeTotal()))
+        //             .collect(toList());
+        var listaAgrupada = boletaRepository.obterBoletasAgrupadasPeloTipoEhCodigoNegociacao2(idUsuario);
+        var resultado = listaAgrupada.stream().collect(groupingBy(BoletaAgrupadoPeloTipoEhCodigoNegociacao2::getCodigoNegociacaoPapel,
+                mapping(b -> new Somatoria(b.getValorTotal(), b.getQuantidadeTotal()), toList())))
+            .entrySet().stream().map(e -> new BoletaAgrupadoPeloCodigoNegociacao2(e.getKey(), e.getValue())).collect(toList());
+
         logger.info("Listando boletas agrupadas. Quantidade: {}", resultado.size());
         return resultado;
     }

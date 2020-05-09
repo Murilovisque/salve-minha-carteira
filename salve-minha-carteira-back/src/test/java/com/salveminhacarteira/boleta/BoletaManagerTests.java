@@ -85,7 +85,7 @@ public class BoletaManagerTests {
     @Test(expected = ArgumentosInvalidadosException.class)
     public void deveLançarExcecaoQuandoTentaVenderMaisAcoesQueComprou() throws SalveMinhaCarteiraException {
         var boletaVenda = boletaOK(Tipo.VENDA);
-        when(boletaRepository.obterQuantidadeTotalPeloTipoEhAcao(anyLong(), anyString(), anyLong())).thenReturn(Optional.empty());
+        when(boletaRepository.obterQuantidadeTotalComSaldoPositivoDaAcao(anyLong(), anyLong())).thenReturn(Optional.empty());
         boletaManager.cadastrarOuAtualizar(boletaVenda.getTipo(), boletaVenda.getData(), boletaVenda.getValor(), boletaVenda.getQuantidade(), boletaVenda.getAcao().getId());
         verify(boletaRepository, never()).salvar(anyString(), any(LocalDate.class), any(BigDecimal.class), anyInt(), anyLong(), anyLong());
     }

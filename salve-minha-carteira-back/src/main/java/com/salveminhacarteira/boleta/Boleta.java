@@ -77,6 +77,10 @@ public class Boleta {
         public Tipo obterOhInverso() {
             return this.equals(COMPRA)? VENDA : COMPRA;
         }
+
+        public boolean equals(String tipoString) {
+            return this.toString().equals(tipoString);
+        }
     }
 
     public void incrementarQuantidade(Boleta boleta) {
