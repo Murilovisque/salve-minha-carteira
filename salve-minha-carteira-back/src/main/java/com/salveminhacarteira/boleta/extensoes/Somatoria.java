@@ -9,6 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Somatoria {
     
+    String tipo;
     BigDecimal valorTotal;
     Integer quantidadeTotal;
 }

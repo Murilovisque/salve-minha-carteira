@@ -2,6 +2,7 @@
 
 # Set permission to handling off the container
 echo $'while [ true ]; do sleep 2; find /salve-minha-carteira-front -user root -exec chown -R ${us_id}:${gr_id} \'{}\' +; done &' >> /root/.bashrc
+echo $'while [ true ]; do if [[ $(ps aux | grep npm | grep -v grep) ]]; then echo "npm install executando ainda..."; else echo "npm install executado."; break; fi; sleep 2; done &' >> /root/.bashrc
 
 npm install
 

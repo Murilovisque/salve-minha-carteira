@@ -1,32 +1,41 @@
 import { Injectable } from '@angular/core';
-import { Notificacao, TipoNotificacao } from '../entidades/notificacao';
+import { Notificacao, TipoNotificacao } from '../global/notificacao';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificadorService {
 
-  private alerta: Notificacao
+  private alertas: Notificacao[] = []
 
   constructor() { }
 
-  public temAlerta(): boolean {
-    return this.alerta != null;
+  public obterAlertas(): Notificacao[] {
+    return this.alertas;
   }
 
-  public obterAlerta(): Notificacao {
-    return this.alerta;
-  }
-
-  public removerAlerta() {
-      this.alerta = null;
+  public removerAlerta(notif: Notificacao = null) {
+      if (notif == null) {
+        if (this.alertas.length > 0) {
+          this.alertas.shift()
+        }
+      } else {
+        let index = this.alertas.indexOf(notif)
+        if (index > -1) {
+          this.alertas.splice(index, 1)
+        }
+      }
   }
 
   public adicionarAlertaSucesso(corpo: string) {
-    this.alerta = new Notificacao("Sucesso", corpo, TipoNotificacao.SUCESSO);
+    this.alertas.push(new Notificacao("Sucesso", corpo, TipoNotificacao.SUCESSO));
   }
 
   public adicionarAlertaErro(corpo: string) {
-    this.alerta = new Notificacao("Erro", corpo, TipoNotificacao.ERRO);
+    this.alertas.push(new Notificacao("Erro", corpo, TipoNotificacao.ERRO));
+  }
+
+  public adicionarAlertaInformativo(corpo: string) {
+    this.alertas.push(new Notificacao("Informativo", corpo, TipoNotificacao.INFO));
   }
 }

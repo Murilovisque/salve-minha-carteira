@@ -83,7 +83,7 @@ public class BoletaManager {
         //             .collect(toList());
         var listaAgrupada = boletaRepository.obterBoletasAgrupadasPeloTipoEhCodigoNegociacao2(idUsuario);
         var resultado = listaAgrupada.stream().collect(groupingBy(BoletaAgrupadoPeloTipoEhCodigoNegociacao2::getCodigoNegociacaoPapel,
-                mapping(b -> new Somatoria(b.getValorTotal(), b.getQuantidadeTotal()), toList())))
+                mapping(b -> new Somatoria(b.getTipo(), b.getValorTotal(), b.getQuantidadeTotal()), toList())))
             .entrySet().stream().map(e -> new BoletaAgrupadoPeloCodigoNegociacao2(e.getKey(), e.getValue())).collect(toList());
 
         logger.info("Listando boletas agrupadas. Quantidade: {}", resultado.size());

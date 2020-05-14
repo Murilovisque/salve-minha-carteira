@@ -1,8 +1,5 @@
-<!-- <ngb-toast *ngFor="let notif of notificadorService.obterNotificacoesAlerta()" [header]="notif.titulo"
-        (hide)="notificadorService.removerAlerta(notif)" [autohide]="false">
-    {{notif.corpo}}
-</ngb-toast> -->
-<p *ngIf="notif != null">
-    <ngb-alert  [type]="notif.tipo"
-        (close)="notificadorService.removerAlerta()"><strong>{{ notif.titulo }} - </strong>{{ notif.corpo }}</ngb-alert>
+<p *ngFor="let notif of notificadorService.obterAlertas()">
+    <ngb-alert  [type]="notif.tipo" (close)="notificadorService.removerAlerta(notif)">
+        <strong>{{ notif.titulo }} - </strong>{{ notif.corpo }}
+    </ngb-alert>
 </p>

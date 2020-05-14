@@ -6,7 +6,10 @@
             <tr>
                 <th scope="col">Selecionar</th>
                 <th scope="col">Código de Negociação</th>
-                <th scope="col">Quantidade</th>                
+                <th scope="col">Qtde. atual investida</th>
+                <th scope="col">Lucro/Prejuízo Compras/Vendas</th>
+                <th scope="col">% Lucro/Prejuízo Compras/Vendas</th>
+                
             </tr>            
         </thead>
         <tbody>
@@ -15,11 +18,10 @@
                     <input type="radio" aria-label="Selecionar código de negociação" [value]="boleta.id">
                 </td>
                 <td>{{ boleta.codigoNegociacaoPapel }}</td>
-                <td>{{ boleta.quantidadeTotal }}</td>
+                <td>{{ boleta.quantidadeTotal() }}</td>
+                <td>{{ boleta.rentabilidadeComprasVendas() | currency:'BRL':'symbol':'2.2':'pt-BR' }}</td>
+                <td>{{ boleta.percentualRentabilidadeComprasVendas() | percent:'2.2':'pt-BR' }}</td>                
             </tr>            
         </tbody>
     </table>
-    <ngb-alert *ngIf="boletasAgrupadas != null && boletasAgrupadas.length == 0" [dismissible]="false">
-        Nenhuma ação cadastrada até o momento. Cadastre aqui
-    </ngb-alert>
 </section>

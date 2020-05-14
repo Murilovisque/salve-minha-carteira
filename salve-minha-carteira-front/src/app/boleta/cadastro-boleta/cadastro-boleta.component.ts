@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Acao } from 'src/app/acao/acao';
+import { AcaoService } from 'src/app/acao/acao.service';
 
 @Component({
   selector: 'app-cadastro-boleta',
@@ -8,10 +10,13 @@ import { Component, OnInit } from '@angular/core';
 export class CadastroBoletaComponent implements OnInit {
 
   tipo :string
+  termo :string
+  acoesEncontradas: Acao[]
 
-  constructor() { }
+  constructor(private acaoService: AcaoService) { }
 
   ngOnInit() {
+    
   }
 
 }

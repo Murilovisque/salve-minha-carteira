@@ -1,5 +1,5 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
-import { Notificacao } from 'src/app/entidades/notificacao';
+import { Notificacao } from 'src/app/global/notificacao';
 import { NotificadorService } from '../notificador.service';
 
 @Component({
@@ -7,18 +7,8 @@ import { NotificadorService } from '../notificador.service';
   templateUrl: './notificacoes-alerta.component.html',
   styleUrls: ['./notificacoes-alerta.component.css']
 })
-export class NotificacoesAlertaComponent implements OnInit, DoCheck {
-
-  notif: Notificacao
+export class NotificacoesAlertaComponent {
 
   constructor(public notificadorService: NotificadorService) { }
-
-  ngOnInit() {
-  }
-
-  ngDoCheck() {
-    if (this.notificadorService.temAlerta())
-      this.notif = this.notificadorService.obterAlerta();
-  }
 
 }

@@ -33,7 +33,7 @@ interface BoletaRepository extends CrudRepository<Boleta, Long> {
         + "where b.id_usuario = :id_usuario group by a.id, a.cod_negociacao, b.tipo", nativeQuery = true)
     List<BoletaAgrupadoPeloTipoEhCodigoNegociacao> obterBoletasAgrupadasPeloTipoEhCodigoNegociacao(@Param("id_usuario") Long idUsuario);
 
-    @Query(value = "select a.id, a.cod_negociacao, b.tipo, sum(b.valor * b.quantidade) as valortotal, sum(b.quantidade) as quantidadetotal from boleta b "
+    @Query(value = "select a.cod_negociacao, b.tipo, sum(b.valor * b.quantidade) as valortotal, sum(b.quantidade) as quantidadetotal from boleta b "
         + "inner join acao a on b.id_acao = a.id "
         + "where b.id_usuario = :id_usuario group by a.id, a.cod_negociacao, b.tipo", nativeQuery = true)
     List<BoletaAgrupadoPeloTipoEhCodigoNegociacao2> obterBoletasAgrupadasPeloTipoEhCodigoNegociacao2(@Param("id_usuario") Long idUsuario);

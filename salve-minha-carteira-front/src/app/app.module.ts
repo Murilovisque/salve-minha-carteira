@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -14,6 +14,12 @@ import { PainelModule } from './painel/painel.module';
 import { BoletaModule } from './boleta/boleta.module';
 import { SegurancaModule } from './seguranca/seguranca.module';
 import { HTTP_INTERCEPTOR_PROVIDER } from './seguranca/interceptadores/config';
+
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+import { AcaoModule } from './acao/acao.module';
+
+registerLocaleData(localePt, "pt-BR");
 
 
 @NgModule({
@@ -32,10 +38,13 @@ import { HTTP_INTERCEPTOR_PROVIDER } from './seguranca/interceptadores/config';
     PainelModule,
     BoletaModule,
     SegurancaModule,
+    AcaoModule,
   ],
   providers: [
-    HTTP_INTERCEPTOR_PROVIDER
+    HTTP_INTERCEPTOR_PROVIDER,
+    {provide: LOCALE_ID, useValue: 'pt-BR' }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

@@ -20,8 +20,7 @@ export class LoginComponent implements OnInit {
 
 	constructor(private usuarioService: UsuarioService, public notificadorService: NotificadorService, private router: Router) { }
 
-	ngOnInit() {
-	}
+	ngOnInit() {}
 
 	autenticar() {
 		this.usuarioService.autenticar(this.obterValorForm('email'), this.obterValorForm('senha')).subscribe(

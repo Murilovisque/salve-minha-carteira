@@ -7,4 +7,6 @@ export class Recursos {
     static readonly API_USUARIOS = 'api/usuarios';
     static readonly API_USUARIOS_AUTENTICAR = Recursos.API_USUARIOS + '/autenticar';
     static readonly API_BOLETAS = 'api/boletas';
+    static readonly API_ACOES = 'api/acoes';
+    static readonly API_ACOES_PROCURAR = Recursos.API_ACOES + '/procurar';
 }

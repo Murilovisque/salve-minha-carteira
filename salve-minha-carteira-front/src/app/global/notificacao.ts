@@ -12,5 +12,6 @@ export class Notificacao {
 
 export enum TipoNotificacao {
     SUCESSO = 'success',
-    ERRO = 'danger'
+    ERRO = 'danger',
+    INFO = 'info'
 }

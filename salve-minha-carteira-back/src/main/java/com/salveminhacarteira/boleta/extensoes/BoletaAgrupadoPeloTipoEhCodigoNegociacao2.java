@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 public interface BoletaAgrupadoPeloTipoEhCodigoNegociacao2 {
 
-    Long getId();
-
     String getTipo();
 
     @Value("#{target.cod_negociacao}")

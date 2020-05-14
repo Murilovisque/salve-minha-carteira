@@ -17,16 +17,16 @@ export class UsuarioService {
 	cadastrar(nome: string, email: string, senha: string): Observable<any> {    
 		let params = new HttpParams().set('nome', nome.trim()).append('email', email).append('senha', senha)
 		return this.http.post(Recursos.API_USUARIOS, params).
-		pipe(retryWhen(this.erroService.retentarRequisicaoHTTP), catchError(this.erroService.mapearErro))
+			pipe(retryWhen(this.erroService.retentarRequisicaoHTTP), catchError(this.erroService.mapearErro))
 	}
 
 	autenticar(email: string, senha: string) {
 		let params = new HttpParams().set('email', email).append('senha', senha);
-		return this.http.post<Token>(Recursos.API_USUARIOS_AUTENTICAR, params).
-			pipe(
+		return this.http.post<Token>(Recursos.API_USUARIOS_AUTENTICAR, params)
+			.pipe(
 				tap(token => this.tokenService.configurarTokenAutenticacao(token.hash).subscribe()),
 				retryWhen(this.erroService.retentarRequisicaoHTTP),
-				catchError(this.erroService.mapearErro))
+				catchError(this.erroService.mapearErro));
 	}
 }
 
