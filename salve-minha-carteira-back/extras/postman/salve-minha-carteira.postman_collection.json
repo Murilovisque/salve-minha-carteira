@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1bf0c8b8-148e-443d-b0c6-924eef45acc9",
+		"_postman_id": "a3102074-dbc3-4c2b-ba9e-51f041d976b8",
 		"name": "Salve minha carteira",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -45,7 +45,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "673be30b-a09a-4363-868b-e39f54f223f8",
+						"id": "39228b80-a869-461d-b32c-448881fc718b",
 						"exec": [
 							"pm.test(\"Deve autenticar e devolver o token\", function () {",
 							"    pm.response.to.have.status(200);",
