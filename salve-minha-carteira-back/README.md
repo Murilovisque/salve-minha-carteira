@@ -7,7 +7,7 @@ Este projeto foi gerado com o angular-cli [Angular CLI](https://github.com/angul
 
 ## Criar o ambiente via docker
 
-Executar os comandos abaixo para iniciar o container em background e acessá-lo
+Executar os comandos abaixo na raiz do projeto para iniciar o container em background e acessá-lo
 ```
 ./extras/docker/run-docker.sh
 ```
@@ -24,6 +24,17 @@ debug #aguarda uma conexão remota para debug na porta 5005
 run-tests
 ```
 
+## Gerador de dados das empresas da B3
+
+### Ferramentas necessárias
+
+* Python versão 3
+* Pip (gerenciador de pacotes do python) versão 3
+
+### Gerar o arquivo de dados
+
+Executar os comandos abaixo na raiz do projeto
+
 ## Criando/atualizando script para popular a tabela de empresas na bolsa
 - Acessar o site da b3 e baixar o arquivo com o histórico anual:
     - http://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/equities/historical-quotes/
@@ -38,6 +49,7 @@ rm ${ARQUIVOACOES}
 - Atualizar o arquivo gerado substituindo o que está localizado na pasta extras/database/
 
 ## Criando/atualizando script para popular a tabela de acoes na bolsa
+
 - Acessar o site da b3 e baixar o arquivo com o histórico anual:
     - http://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/equities/historical-quotes/
 - Executar os comandos abaixo
@@ -51,6 +63,7 @@ rm ${ARQUIVOACOES}
 - Atualizar o arquivo gerado substituindo o que está localizado na pasta extras/database/
 
 ## Banco de dados
+
 Abaixo comandos para acessar o container que está executando o banco de dados
 ```
 docker-compose exec salve-minha-carteira-back-bd bash
