@@ -31,9 +31,22 @@ run-tests
 * Python versão 3
 * Pip (gerenciador de pacotes do python) versão 3
 
-### Gerar o arquivo de dados
+### Gerar o arquivo de dados das empresas da b3
+
+#### Detalhes do script
+
+O script gen-dados-empresas-b3.py lê a página das empresas da b3 e gera um arquivo chamado 'gen-dados-empresas-b3-output.json' que possui os dados das empresas da B3,
+caso o script não complete a execução poderá ser executado novamente e continuar de onde parou
+* --local True : parâmetro adicional é usado para processar o arquivo de dados existentes sem consultar o site da b3, usado para corrigir ou formatar o json de saída
+
+#### Executando os script
 
 Executar os comandos abaixo na raiz do projeto
+
+```
+cd extras/scripts
+python3 gen-dados-empresas-b3.py
+```
 
 ## Criando/atualizando script para popular a tabela de empresas na bolsa
 - Acessar o site da b3 e baixar o arquivo com o histórico anual:
