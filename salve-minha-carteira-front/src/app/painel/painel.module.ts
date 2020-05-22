@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PainelRoutingModule } from './painel-routing.module';
 import { HomeComponent } from './home/home.component';
 
-import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { BoletaModule } from '../boleta/boleta.module';
 
 
 @NgModule({
@@ -12,7 +12,7 @@ import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [
     CommonModule,
     PainelRoutingModule,
-    NgbAlertModule
+    BoletaModule
   ]
 })
 export class PainelModule { }
