@@ -11,6 +11,8 @@ import tempfile
 import os
 import sys
 
+ARQUIVO_DADOS_B3_SAIDA = "../dados/dados-empresas-b3.json"
+
 empresas = []
 
 def normalizar(word):
@@ -127,11 +129,11 @@ def acessar_dados_das_empresas(driver):
 
 
 def normalizar_empresas_json_e_salvar():
-    jsonfile = open("gen-dados-empresas-b3-output.json", "w")
+    jsonfile = open(ARQUIVO_DADOS_B3_SAIDA, "w")
     jsonfile.write(json.dumps(empresas))
     jsonfile.close()
 
-    jsonfile = open("gen-dados-empresas-b3-output.json", "r")
+    jsonfile = open(ARQUIVO_DADOS_B3_SAIDA, "r")
     empresas_temp = json.loads(jsonfile.read())
     jsonfile.close()
 
@@ -145,7 +147,7 @@ def normalizar_empresas_json_e_salvar():
             empresas_normalized.append(e)
             razoes_social[e["razao_social"]] = 1
 
-    jsonfile = open("gen-dados-empresas-b3-output.json", "w")
+    jsonfile = open(ARQUIVO_DADOS_B3_SAIDA, "w")
     jsonfile.write(json.dumps(empresas_normalized, indent=4))
     jsonfile.close()
 
@@ -154,7 +156,7 @@ with webdriver.Firefox() as driver:
     is_local_exec = True if "--local" in sys.argv else False
     
     try:
-        jsonfile = open("gen-dados-empresas-b3-output.json", "r")
+        jsonfile = open(ARQUIVO_DADOS_B3_SAIDA, "r")
         empresas = json.loads(jsonfile.read())
         jsonfile.close()
     except Exception as err:

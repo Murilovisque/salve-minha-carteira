@@ -17,7 +17,8 @@ public class Empresa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
-  
+
+    @Column(name = "nome_pregao")
     private String nome;
 
 

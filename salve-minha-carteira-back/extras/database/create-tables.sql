@@ -2,8 +2,24 @@ use salve-minha-carteira-db;
 
 CREATE TABLE IF NOT EXISTS empresa(
     id BIGINT NOT NULL AUTO_INCREMENT,
-    nome VARCHAR(40) NOT NULL,
+    razao_social VARCHAR(70) NOT NULL UNIQUE,
+    nome_pregao VARCHAR(70) NOT NULL UNIQUE,
+    cnpj VARCHAR(14) NOT NULL UNIQUE,
     PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS setor(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(70) NOT NULL UNIQUE,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS empresa_setor(
+    id_empresa BIGINT NOT NULL,
+    id_setor BIGINT NOT NULL,
+    PRIMARY KEY(id_empresa, id_setor),
+    FOREIGN KEY(id_empresa) REFERENCES empresa(id),
+    FOREIGN KEY(id_setor) REFERENCES setor(id)
 );
 
 CREATE TABLE IF NOT EXISTS acao(

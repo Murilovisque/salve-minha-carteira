@@ -29,55 +29,64 @@ run-tests
 ### Ferramentas necessárias
 
 * Python versão 3
+  * Dependência selenium
 * Pip (gerenciador de pacotes do python) versão 3
+* Navegador Firefox
 
 ### Gerar o arquivo de dados das empresas da b3
 
-#### Detalhes do script
+### Detalhes do script
 
 O script gen-dados-empresas-b3.py lê a página das empresas da b3 e gera um arquivo chamado 'gen-dados-empresas-b3-output.json' que possui os dados das empresas da B3,
 caso o script não complete a execução poderá ser executado novamente e continuar de onde parou
 * --local True : parâmetro adicional é usado para processar o arquivo de dados existentes sem consultar o site da b3, usado para corrigir ou formatar o json de saída
 
-#### Executando os script
+### Configuração necessário para executar o script
+
+Ter o Python e o PIP instalados. Executar os comandos abaixo
+
+```
+pip3 install selenium
+```
+
+Baixar o geckodriver em uma pasta de preferência e adicionar o caminho da pasta onde estará o executável na variável de ambiente PATH.
+
+* Link da página raiz para download: https://github.com/mozilla/geckodriver/releases
+* Exemplo de download e configuração
+
+```
+wget https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz
+mkdir geckodriver-v0.26.0
+tar -xzvf geckodriver-v0.26.0-linux64.tar.gz -C geckodriver-v0.26.0
+cd geckodriver-v0.26.0
+export PATH="${PATH}:$(pwd)"
+cd .. && rm geckodriver-v0.26.0-linux64.tar.gz
+```
+
+### Gerar o arquivo de dados das empresas da b3
 
 Executar os comandos abaixo na raiz do projeto
 
 ```
 cd extras/scripts
 python3 gen-dados-empresas-b3.py
+rm geckodriver.log
+cd ../..
 ```
 
-## Criando/atualizando script para popular a tabela de empresas na bolsa
-- Acessar o site da b3 e baixar o arquivo com o histórico anual:
-    - http://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/equities/historical-quotes/
-- Executar os comandos abaixo
-```
-ARQUIVOACOES="COTAHIST_A2019.TXT" #colocar o nome do arquivo baixado
-sed '1d;$d' ${ARQUIVOACOES} -i ${ARQUIVOACOES}
-echo "use salve-minha-carteira-db;" > populate-empresa.sql
-awk '{ nomeempr=substr($0, 28, 12); codbgi=substr($0, 11, 2); gsub(/[ \t]+$/, "", nomeempr); queryins="INSERT INTO empresa (nome) VALUES (\x27"nomeempr"\x27);"; if (codbgi == "96" || codbgi == "02") print queryins }' ${ARQUIVOACOES} | sort -u >> populate-empresa.sql
-rm ${ARQUIVOACOES}
-```
-- Atualizar o arquivo gerado substituindo o que está localizado na pasta extras/database/
+### Gerando/Atualizando o script para popular os dados das tabelas Setor, Empresa e Acao
 
-## Criando/atualizando script para popular a tabela de acoes na bolsa
+Executar os comandos abaixo na raiz do projeto
 
-- Acessar o site da b3 e baixar o arquivo com o histórico anual:
-    - http://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/equities/historical-quotes/
-- Executar os comandos abaixo
 ```
-ARQUIVOACOES="COTAHIST_A2019.TXT" #colocar o nome do arquivo baixado
-sed '1d;$d' ${ARQUIVOACOES} -i ${ARQUIVOACOES}
-echo "use salve-minha-carteira-db;" > populate-acoes.sql
-awk '{ nomeempr=substr($0, 28, 12); codbdi=substr($0, 11, 2); codneg=substr($0, 13, 12); gsub(/[ \t]+$/, "", nomeempr); gsub(/[ \t]+$/, "", codneg); queryins="insert into acao (cod_negociacao, id_empresa) VALUES (\x27"codneg"\x27, (select id from empresa where nome = \x27"nomeempr"\x27));"; if (codbdi == "96" || codbdi == "02") print queryins }' ${ARQUIVOACOES} | sort -u > populate-acoes.sql
-rm ${ARQUIVOACOES}
+cd extras/scripts
+python3 gen-bd-inserts-partir-dados-b3.py
+cd ../..
 ```
-- Atualizar o arquivo gerado substituindo o que está localizado na pasta extras/database/
 
 ## Banco de dados
 
-Abaixo comandos para acessar o container que está executando o banco de dados
+Abaixo comandos para acessar o container que está executando o banco de dados. Deve-se executar na raiz do projeto
 ```
 docker-compose exec salve-minha-carteira-back-bd bash
 ```
