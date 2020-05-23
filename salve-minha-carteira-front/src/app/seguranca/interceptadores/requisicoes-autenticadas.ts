@@ -9,12 +9,11 @@ import { UsuarioNaoAutenticadoError } from 'src/app/global/erro.service';
 @Injectable()
 export class RequisicoesAutenticadas implements HttpInterceptor {
 
-    static readonly RECURSOS_PUBLICOS = `${Recursos.API_USUARIOS}|${Recursos.API_USUARIOS_AUTENTICAR}`
 
     constructor(private tokenService: TokenService) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (req.url.match(RequisicoesAutenticadas.RECURSOS_PUBLICOS))
+        if (req.url.match(Recursos.RECURSOS_PUBLICOS_REGEX))
             return next.handle(req);
         
         return this.tokenService.obterTokenAutenticacao().pipe(

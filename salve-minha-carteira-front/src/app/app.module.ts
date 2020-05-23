@@ -36,7 +36,7 @@ registerLocaleData(localePt, "pt-BR");
   ],
   providers: [
     HTTP_INTERCEPTOR_PROVIDER,
-    {provide: LOCALE_ID, useValue: 'pt-BR' }
+    {provide: LOCALE_ID, useValue: 'pt-BR' },
   ],
   bootstrap: [AppComponent]
 })
